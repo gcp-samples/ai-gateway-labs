@@ -115,7 +115,7 @@ gcloud iam service-accounts add-iam-policy-binding \
 PROJECT_NUMBER=$(gcloud projects describe $GOOGLE_CLOUD_PROJECT --format="value(projectNumber)")
 gcloud iam service-accounts add-iam-policy-binding \
   ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com \
-  --member="serviceAccount:apigee-$PROJECT_NUMBER@gcp-sa-apigee.iam.gserviceaccount.com" \
+  --member="serviceAccount:service-$PROJECT_NUMBER@gcp-sa-apigee.iam.gserviceaccount.com" \
   --role="roles/iam.serviceAccountTokenCreator" --project $GOOGLE_CLOUD_PROJECT
 ```
 
