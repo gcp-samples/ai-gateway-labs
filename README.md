@@ -4,8 +4,8 @@ These labs guide you through creating an AI Gateway on Google Cloud leveraging [
 ![AI Gateway Overview](https://iili.io/Bm91xHB.png)
 
 ## Google Services used
-* [Apigee](https://cloud.google.com/solutions/apigee-ai) - Apigee is used as the gateway, either as native Google Cloud service with Apigee X, or as hybrid deployment in Kubernetes.
-* [Gemini Enterprise Model Garden](https://cloud.google.com/model-garden) - Highly efficient model hosting, from SOTA frontier models, to leading open source and open weight models.
+* [Apigee](https://cloud.google.com/solutions/apigee-ai) - Apigee is used as the gateway, either running natively on Google Cloud, or as a hybrid deployment in Kubernetes.
+* [Gemini Enterprise Model Garden](https://cloud.google.com/model-garden) - Highly efficient model hosting, from SOTA frontier models to leading open source and open weight models.
 * [Model Armor](https://cloud.google.com/security/products/model-armor) - Google Cloud Model Armor is used to screen prompts and responses for objectionable content with flexible templates.
 *  [Sensitive Data Protection](https://cloud.google.com/security/products/sensitive-data-protection) - Sensitive Data Protection is used to mask PII or other senstitive data from requests and responses.
 * [Google Cload Networking](https://docs.cloud.google.com/docs/networking) - High performance [Load Balancers](https://docs.cloud.google.com/load-balancing/docs/load-balancing-overview) are used for ingress and TLS termination, as well as [Private Service Connect](https://docs.cloud.google.com/vpc/docs/private-service-connect) for low-latency, internal traffic & model routing.
