@@ -124,7 +124,7 @@ gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT \
 gcloud iam service-accounts add-iam-policy-binding \
   ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com \
   --member="user:$(gcloud config get-value account 2>/dev/null)" \
-  --role="roles/iam.serviceAccountTokenCreator"
+  --role="roles/iam.serviceAccountTokenCreator" --project $GOOGLE_CLOUD_PROJECT
 
 PROJECT_NUMBER=$(gcloud projects describe $GOOGLE_CLOUD_PROJECT --format="value(projectNumber)")
 gcloud iam service-accounts add-iam-policy-binding \
