@@ -18,7 +18,7 @@ To run these labs you will need:
 
 The labs are organized as [Google Cloud Shell Tutorials](https://docs.cloud.google.com/shell/docs/cloud-shell-tutorials/tutorials), and can run interactively in your own project.
 
-### 🏗 AI Gateway Foundations Lab
+### 👷 AI Gateway Foundations Lab
 
 In this lab you will:
 * Provision an **Apigee X** instance (either as Evaluation, Pay-as-you-go, or Subscription) in your chosen Google Cloud project and region using **Terraform**, using either the global or regional DRZ (US, EU, IN) control planes.
