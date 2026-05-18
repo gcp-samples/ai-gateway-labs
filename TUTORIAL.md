@@ -1,6 +1,6 @@
-# Apigee AI Gateway Lab
+# AI Gateway Foundations Lab
 ---
-This tutorial helps you to provision an Apigee AI Gateway into your Google Cloud project, and create some AI proxies to add governance to tools like Gemini CLI and Claude Code.
+This tutorial helps you to provision an AI Gateway into your Google Cloud project, and create some AI proxies to add governance to tools like Gemini CLI and Claude Code.
 
 Let's get started!
 
