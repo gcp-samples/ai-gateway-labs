@@ -64,11 +64,11 @@ npm i apigee-templater -g
 
 ---
 
-## Configure Apigee
+## Provision Apigee (if needed)
 
 You can provision your Apigee instance in any of the ways documented [here](https://docs.cloud.google.com/apigee/docs/api-platform/get-started/provisioning-options).
 
-If you already have Apigee provisioned, then you can skip this step.
+**If you already have Apigee provisioned, then you can skip this step.**
 
 For a **simple, automated** deployment, run the [Terraform](https://developer.hashicorp.com/terraform) deployment in this lab, which provisions Apigee, a load balancer, certificate, and other needed services (all from the standard [Google provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs)).
 
@@ -94,7 +94,7 @@ Provisioning takes around 20-30 minutes for all services to be enabled & deploye
 
 ## Initialize environment
 
-After provisioning is finished, let's initialize the environment, enable Model Garden and other services, and create a service account to access our AI models.
+After provisioning is finished, let's initialize the Apigee environment, enable Model Garden and other services, and create a service account to access our AI models.
 
 Take a look at the <walkthrough-editor-open-file filePath="script_initialize.sh">script_initialize.sh</walkthrough-editor-open-file> file to see the commands that are run.
 
@@ -107,21 +107,9 @@ source script_initialize.sh
 
 ## Test Gemini API
 
-Now let's test if the Gemini API on [Gemini Enterprise Agent Platfrom](https://docs.cloud.google.com/gemini-enterprise-agent-platform) is working.
+Now let's make a direct call to the Gemini API on [Model Garden](https://cloud.google.com/model-garden), to verify that it is working.
 
-```mermaid
-%% Example of sequence diagram
-  sequenceDiagram
-    Alice->>Bob: Hello Bob, how are you?
-    alt is sick
-    Bob->>Alice: Not so good :(
-    else is well
-    Bob->>Alice: Feeling fresh like a daisy
-    end
-    opt Extra response
-    Bob->>Alice: Thanks for asking
-    end
-```
+<img src="https://iili.io/C9TPzEF.png" height=60 />
 
 ```sh
 curl -i -X POST "https://aiplatform.googleapis.com/v1/projects/$GOOGLE_CLOUD_PROJECT/locations/global/publishers/google/models/gemini-flash-latest:generateContent" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H "Content-Type: application/json" \
@@ -132,9 +120,13 @@ You should get a response with an answer candidate with some text about **'Rayle
 
 ---
 
-## Create Gemini Proxy
+## Create Simple Gemini Proxy
 
-Let's create a simple **AI-Gemini** proxy using the `aft` command with a base path of **/gemini** and deploying it to a proxy called **AI-Gemini** in your Apigee environment.
+Let's create a simple **AI-Gemini** proxy to add governance & analytics to more effectively manage our AI usage. This proxy will intercept all calls to the model, check usage & quotas, and record analytics data.
+
+<img src="https://iili.io/C9TZOgt.png" height=60 />
+
+We will use the **aft** command to create a proxy with the base path **/gemini** and directing traffic to the Google Cloud AI endpoint.
 
 ```sh
 aft -b /gemini -u https://aiplatform.googleapis.com -o $GOOGLE_CLOUD_PROJECT:AI-Gemini:$APIGEE_ENVIRONMENT
@@ -155,13 +147,13 @@ You should get a similar response again about **'Rayleigh scattering'**.
 
 Go back to the Debug panel, and see the processing steps, timings and variables that were done between the request and response.
 
+✅ Now we have a proxy in place to add governance & analytics to the AI prompt requests.
+
 ---
 
-## Add Model Authorization, Governance & Analytics Features
+## Add Model Authorization, Governance & Analytics
 
-Now we will update the proxy for **Gemini**, and also add a new one for **Claude**, with a template that applies model authorization & governance.
-
-Open the template file <walkthrough-editor-open-file filePath="AI-Proxy-Gemini.yaml">AI-Proxy-Gemini.yaml</walkthrough-editor-open-file> to see how a proxy template is structured, including the parameters (where we are setting a base path of **/gemini** and a model filter to only allow **gemini** models).
+Now we will update the proxy for **Gemini**, and also add more proxies for further models. These proxies are based on YAML proxy templates (open <walkthrough-editor-open-file filePath="AI-Proxy-Gemini.yaml">AI-Proxy-Gemini.yaml</walkthrough-editor-open-file> for an example), and see the [aft documentation](https://github.com/apigee/apigee-templater) for more information.
 
 ```sh
 aft AI-Proxy-Gemini.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Gemini:$APIGEE_ENVIRONMENT:ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
@@ -171,7 +163,7 @@ aft AI-Proxy-Claude.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Claude:$APIGEE_ENVIRONMENT:
 aft -i AI-Analytics.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Analytics:$APIGEE_ENVIRONMENT
 ```
 
-Create a product & subscription to the **AI-Gemini** proxy.
+Now let's create a **product** & **subscription** to the **AI-Gemini** proxy. [Products](https://docs.cloud.google.com/apigee/docs/api-platform/publish/what-api-product) and [Subscriptions](https://docs.cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api) allow user authorization and detailed quotas on things like number of tokens, calls or specific models, paths or operations.
 
 Take a look at the <walkthrough-editor-open-file filePath="script_register_key.sh">script_register_key.sh</walkthrough-editor-open-file> file to see the commands that are run.
 
