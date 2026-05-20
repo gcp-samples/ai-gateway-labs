@@ -261,7 +261,7 @@ curl -i -X POST "https://$APIGEE_HOST/claude/v1/projects/$PROJECT_ID/locations/g
 
 ## Test Gemini CLI and Claude Code with Apigee Proxies
 
-<img src="https://iili.io/C9und67.png" />
+<img src="https://iili.io/C9AUIMF.png" />
 
 Now let's update our terminal session with our new **Gemini Proxy** information by setting these variables:
 
