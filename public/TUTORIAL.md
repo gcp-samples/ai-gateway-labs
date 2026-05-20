@@ -29,7 +29,7 @@ These [Google Cloud roles](https://docs.cloud.google.com/iam/docs/roles-permissi
 
 ## Setup
 
-<img src="https://iili.io/C9AMqFt.png" />
+<img src="https://iili.io/C9AV5zv.png" />
 
 You will need to set these environment variables to run this lab:
 
@@ -60,7 +60,7 @@ source .env
 
 ### Install tooling
 
-<img src="https://iili.io/C9AMqFt.png" />
+<img src="https://iili.io/C9AV5zv.png" />
 
 This lab uses two open source CLIs to automate Apigee, [apigeecli](https://github.com/apigee/apigeecli) and [aft](https://github.com/apigee/apigee-templater), run these commands to install:
 
@@ -103,7 +103,7 @@ Provisioning takes around 20-30 minutes for all services to be enabled & deploye
 
 ## Initialize environment
 
-<img src="https://iili.io/C9AMqFt.png" />
+<img src="https://iili.io/C9AV5zv.png" />
 
 After provisioning is finished, let's initialize the Apigee environment, enable Model Garden and other services, and create a service account to access our AI models.
 
