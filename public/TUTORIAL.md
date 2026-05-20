@@ -229,6 +229,7 @@ curl -i -X POST "https://$APIGEE_HOST/qwen/v1beta1/projects/$GOOGLE_CLOUD_PROJEC
 -d '{"model": "qwen/qwen3-next-80b-a3b-thinking-maas", "stream": false, "messages":  [{"role": "user", "content": "What is a constellation in astronomy?"}]}'
 ```
 
+### Optional 
 Enable Anthropic models to call them through the **Claude** proxy.
 * [Claude Haiku 4.5](https://console.cloud.google.com/agent-platform/publishers/anthropic/model-garden/claude-haiku-4-5)
 * [Claude Sonnet 4.6](https://console.cloud.google.com/agent-platform/publishers/anthropic/model-garden/claude-sonnet-4-6)
@@ -246,6 +247,15 @@ curl -i -X POST "https://$APIGEE_HOST/claude/v1/projects/$PROJECT_ID/locations/g
 
 ## Test Gemini CLI and Claude Code with Apigee Proxies
 
+<img src="https://iili.io/C9und67.png" />
+
+Now let's update our terminal session with our new **Gemini Proxy** information by setting these variables:
+
+```sh
+export GOOGLE_VERTEX_BASE_URL="https://$APIGEE_HOST/gemini"
+export GEMINI_CLI_CUSTOM_HEADERS="x-api-key: $API_KEY"
+```
+
 Show your **Apigee Host** and **API Key** to use in the CLI configurations.
 
 ```sh
@@ -254,43 +264,25 @@ echo $APIGEE_HOST
 echo $API_KEY
 ```
 
-1. Open your `~/.bashrc` to edit with this command:
-
-```sh
-nano ~/.bashrc
-```
-
-2. **Add these environment variables with your data:**
-
-```sh
-# Gemini
-export GOOGLE_VERTEX_BASE_URL=https://YOUR_APIGEE_HOST/gemini
-export GOOGLE_CLOUD_PROJECT=YOUR_GOOGLE_CLOUD_PROJECT
-export GOOGLE_CLOUD_LOCATION=global
-export GEMINI_CLI_CUSTOM_HEADERS="x-api-key: YOUR_API_KEY"
-
-# Anthropic
-export CLAUDE_CODE_USE_VERTEX=1
-export CLOUD_ML_REGION=global
-export ANTHROPIC_VERTEX_PROJECT_ID=YOUR_GOOGLE_CLOUD_PROJECT
-export ANTHROPIC_DEFAULT_OPUS_MODEL='claude-opus-4-7'
-export ANTHROPIC_DEFAULT_SONNET_MODEL='claude-sonnet-4-6'
-export ANTHROPIC_VERTEX_BASE_URL=https://YOUR_APIGEE_HOST/claude/v1
-export ANTHROPIC_CUSTOM_HEADERS="x-api-key: YOUR_API_KEY"
-```
-
-How use Gemini CLI and Claude Code (if installed) as you normally would, except now all of the model traffic is going through our Apigee proxies.
+Start a **debug session** in the Apigee console again, and use **Gemini CLI** to answer some questions. Feel free to ask additional prompts, or start the full tool.
 
 ```sh
 gemini -p "What does the constellation Leo look like? "
+```
+
+```sh
 gemini -p "What does the constellation Scorpio look like? "
 ```
 
-Install Claude Code and test in the same way.
+You should see debug traces of the conversations in Apigee, with each step of the policy & logic checks.
+
+🏆 Congratulations, you have a full **AI Gateway** running in front of your **Gemini** (and many other) models!
 
 ## View Analytics Data
 
-Start a local analytics dashboard to see the usage data.
+<img src="https://iili.io/C9AFb2a.png" />
+
+Now that we have some AI traffic flowing, let's start a local analytics dashboard (hosted in Go) to view the token & usage metrics. 
 
 ```sh
 go run .
@@ -302,10 +294,18 @@ Click on the **[Web Preview 🖵](https://docs.cloud.google.com/shell/docs/using
 
 Click on the **Demo Mode** slider at the top to see what the dashboard looks like with more data from a longer timeframe.
 
+🏆🏆 Double Congratulations, you have a full **AI Gateway** analytics dashboard running in your lab environment! Make some more calls and watch as the data & usage grow 📈.
+
+### Optional
+
+<img src="https://iili.io/C9AFb2a.png" />
+
+You can also use [Google Data Studio](https://datastudio.google.com/) to design Apigee AI dashboards, take a look at this [template](https://datastudio.google.com/s/nqey8Stz8rs), and as a bonus try cloning it and creating your own using the [Apigee Data Source](https://docs.cloud.google.com/apigee/docs/api-platform/analytics/data-studio).
+
 ---
 
 ## Conclusion
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-Congratulations! You've successfully completed the **AI Gateway Foundations Lab** on Google Cloud. Keep an eye out for more AI Gateway Labs, and let us know what you think!
+🏆🏆🏆 Triple Congratulations! You've successfully completed the **AI Gateway Foundations Lab** on Google Cloud. Keep an eye out for more AI Gateway Labs, and let us know what you think!
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
