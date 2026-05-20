@@ -3,7 +3,7 @@
 <img src="https://iili.io/C9Al3Ol.jpg" />
 
 ---
-This tutorial helps you to provision an AI Gateway into your Google Cloud project, and create some AI proxies to add governance to tools like Gemini CLI and Claude Code.
+This tutorial helps you to provision an AI Gateway into your Google Cloud project, and create AI proxies to add **governance & analytics** to agentic tooling like **Gemini CLI**, **Claude Code**, as well as any other agents or apps using AI in the organization.
 
 Let's get started!
 
