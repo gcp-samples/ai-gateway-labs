@@ -27,7 +27,7 @@ In this lab you will:
 * Use the AI Gateway as proxy in [Gemini CLI](https://geminicli.com/) and [Claude Code](https://claude.com/product/claude-code) for local CLI usage.
 * View analytics usage of each model, for example counts of **prompt tokens**, **response tokens**, **time-to-first-token**, **latency**, etc...
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/tyayers/apigee-aigateway-lab&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=public/TUTORIAL.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/tyayers/ai-gateway-labs&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=public/TUTORIAL.md)
 
 Direct [markdown](https://github.com/tyayers/ai-gateway-labs/blob/main/public/TUTORIAL.md) link.
 
@@ -41,7 +41,7 @@ In this lab you will:
 * Test the AI proxy endpoints with malicious prompts.
 * Test the AI proxy endpoints with PII personal data.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/tyayers/apigee-aigateway-lab&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=public/TUTORIAL_SECURITY.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/tyayers/ai-gateway-labs&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=public/TUTORIAL_SECURITY.md)
 
 Direct [markdown](https://github.com/tyayers/ai-gateway-labs/blob/main/public/TUTORIAL_SECURITY.md) link.
 
@@ -55,6 +55,6 @@ In this lab you will:
 * Create a **REST-MCP translation proxy** to convert an existing REST endpoint to MCP.  
 * Observe MCP tool access in analytics and logs.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/tyayers/apigee-aigateway-lab&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=public/TUTORIAL_TOOLS.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/tyayers/ai-gateway-labs&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=public/TUTORIAL_TOOLS.md)
 
 Direct [markdown](https://github.com/tyayers/ai-gateway-labs/blob/main/public/TUTORIAL_TOOLS.md) link.
