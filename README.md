@@ -31,6 +31,8 @@ In this lab you will:
 
 Direct [markdown](https://github.com/tyayers/ai-gateway-labs/blob/main/public/TUTORIAL.md) link.
 
+---
+
 ### 🔐 AI Gateway Security Lab
 
 In this lab you will:
@@ -42,6 +44,8 @@ In this lab you will:
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/tyayers/apigee-aigateway-lab&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=public/TUTORIAL_SECURITY.md)
 
 Direct [markdown](https://github.com/tyayers/ai-gateway-labs/blob/main/public/TUTORIAL_SECURITY.md) link.
+
+---
 
 ### 🛠 AI Gateway Tools Lab
 
