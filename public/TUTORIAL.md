@@ -48,7 +48,7 @@ Additionally these **optional** variables can be set if you want to use an exist
 1. **Copy** the `./sh/env.sh` file to a local `.env` file by running this command.
 
 ```sh
-cp ./sh/env.sh .env
+cp --update=none ./sh/env.sh .env
 ```
 
 2. **Click**  <walkthrough-editor-open-file filePath=".env">here</walkthrough-editor-open-file> to open the `.env` file in the editor.
