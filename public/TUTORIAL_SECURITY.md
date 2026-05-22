@@ -36,7 +36,7 @@ curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 npm i apigee-templater -g
 ```
 
-___
+---
 
 ## Model Armor Template
 
