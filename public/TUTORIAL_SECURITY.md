@@ -6,7 +6,7 @@ This tutorial helps you add security policies such as model prompt screening wit
 
 Let's get started!
 
-## Set Up Environment
+## Setup Environment
 
 <img src="https://iili.io/C9AvqyN.png" />
 
