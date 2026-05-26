@@ -149,7 +149,7 @@ Open the proxy in the [Google Cloud Console](https://console.cloud.google.com/ap
 
 After the deployment is complete, click on the **Debug** tab in the proxy screen, and start a debug session.
 
-![Gemini proxy debug](https://amalbagee.web.app/apigee/ai-gemini-debug1.png)
+[![Gemini proxy debug](https://amalbagee.web.app/apigee/ai-gemini-debug1.png)](https://amalbagee.web.app/apigee/ai-gemini-debug1.png)
 
 Let's now call the proxy URL with our same prompt, but this time see the request processing through our proxy in Apigee. Notice the **$APIGEE_HOST** parameter in the URL, which points the request to our Apigee endpoint.
 
@@ -162,27 +162,25 @@ You should get a similar response again about **'Rayleigh scattering'**.
 
 Go back to the Debug panel, and see the processing steps, timings and variables that were done between the request and response.
 
-![Gemini proxy debug result](https://amalbagee.web.app/apigee/ai-gemini-debug2.png)
+[![Gemini proxy debug result](https://amalbagee.web.app/apigee/ai-gemini-debug2.png)](https://amalbagee.web.app/apigee/ai-gemini-debug2.png)
 
 ✅ Now we have a proxy in place to add governance & analytics to the AI prompt requests.
-
----
 
 ## Add Model Authorization, Governance & Analytics
 
 Now we will update the proxy with authorization, governance & analytics policies, as well as add proxies to more models.
 
-<img src="https://iili.io/C9und67.png" />
+![AI proxies governance](https://amalbagee.web.app/apigee/ai-proxies-gov1.png)
 
 The proxy definitions are YAML templates (see <walkthrough-editor-open-file filePath="AI-Proxy-Gemini.yaml">AI-Proxy-Gemini.yaml</walkthrough-editor-open-file> for an example), and see the [aft documentation](https://github.com/apigee/apigee-templater) for more information.
 
-Deploy the templates:
+Deploy the AI proxy templates:
 
 ```sh
-aft AI-Proxy-Gemini.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Gemini:$APIGEE_ENVIRONMENT:ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
-aft AI-Proxy-DeepSeek.yaml -o $GOOGLE_CLOUD_PROJECT:AI-DeepSeek:$APIGEE_ENVIRONMENT:ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
-aft AI-Proxy-Qwen.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Qwen:$APIGEE_ENVIRONMENT:ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
-aft AI-Proxy-Claude.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Claude:$APIGEE_ENVIRONMENT:ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+aft AI-Proxy-Gemini.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Gemini:$APIGEE_ENVIRONMENT:$PROXY_ID
+aft AI-Proxy-DeepSeek.yaml -o $GOOGLE_CLOUD_PROJECT:AI-DeepSeek:$APIGEE_ENVIRONMENT:$PROXY_ID
+aft AI-Proxy-Qwen.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Qwen:$APIGEE_ENVIRONMENT:$PROXY_ID
+aft AI-Proxy-Claude.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Claude:$APIGEE_ENVIRONMENT:$PROXY_ID
 aft -i AI-Analytics.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Analytics:$APIGEE_ENVIRONMENT
 ```
 
@@ -267,7 +265,7 @@ curl -i -X POST "https://$APIGEE_HOST/claude/v1/projects/$PROJECT_ID/locations/g
 
 ## Test Gemini CLI and Claude Code with Apigee Proxies
 
-<img src="https://iili.io/C9AUIMF.png" />
+![AI proxies governance](https://amalbagee.web.app/apigee/ai-proxies-gov1.png)
 
 Now let's update our terminal session with our new **Gemini Proxy** information by setting these variables:
 
@@ -312,9 +310,11 @@ Take a look at the <walkthrough-editor-open-file filePath="main.go">main.go</wal
 
 Click on the **[Web Preview 🖵](https://docs.cloud.google.com/shell/docs/using-web-preview)** button at the top of the **Cloud Shell** page to open the dashboard and see your analytics data. 
 
+[![AI Gateway Analytics](https://amalbagee.web.app/apigee/ai-analytics1.png)](https://amalbagee.web.app/apigee/ai-analytics1.png)
+
 Click on the **Demo Mode** slider at the top to see what the dashboard looks like with more data from a longer timeframe.
 
-🏆🏆 Double Congratulations, you have a full **AI Gateway** analytics dashboard running in your lab environment! Make some more calls and watch as the data & usage grow 📈.
+🏆 You now have a full **AI Gateway** analytics dashboard running in your lab environment! Make some more calls and watch as the data & usage grow 📈.
 
 ### Optional
 
@@ -327,5 +327,5 @@ You can also use [Google Data Studio](https://datastudio.google.com/) to design 
 ## Conclusion
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-🏆🏆🏆 Triple Congratulations! You've successfully completed the **AI Gateway Foundations Lab** on Google Cloud. Keep an eye out for more AI Gateway Labs, and let us know what you think!
+🏆 Congratulations! You've successfully completed the **AI Gateway Foundations Lab** on Google Cloud. Keep an eye out for more AI Gateway Labs, and let us know what you think!
 <walkthrough-inline-feedback></walkthrough-inline-feedback>

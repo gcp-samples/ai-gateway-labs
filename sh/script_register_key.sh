@@ -1,15 +1,19 @@
 # import products
-apigeecli products import -f AI-Products.json -o $GOOGLE_CLOUD_PROJECT --default-token
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/apiproducts" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "Gemini Product", "displayName": "Gemini Product", "approvalType": "auto", "attributes": [{"name": "access", "value": "public" } ], "environments": ["dev"], "createdAt": "1778486511834", "lastModifiedAt": "1778486511834", "operationGroup": {"operationConfigs": [{"apiSource": "AI-Analytics", "operations": [{"resource": "/" } ], "quota": {} } ], "operationConfigType": "proxy" }, "llmOperationGroup": {"operationConfigs": [{"apiSource": "AI-Gemini", "llmOperations": [{"resource": "/", "model": "gemini-flash-latest" } ], "llmTokenQuota": {"limit": "10000", "interval": "1", "timeUnit": "minute" } } ] } }'
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/apiproducts" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "Claude Product", "displayName": "Claude Product", "approvalType": "auto", "attributes": [{"name": "access", "value": "public" } ], "environments": ["dev"], "createdAt": "1778486511834", "lastModifiedAt": "1778486511834", "operationGroup": {"operationConfigs": [{"apiSource": "AI-Analytics", "operations": [{"resource": "/" } ], "quota": {} } ], "operationConfigType": "proxy" }, "llmOperationGroup": {"operationConfigs": [{"apiSource": "AI-Claude", "llmOperations": [{"resource": "/", "model": "claude-opus-4-7" } ], "llmTokenQuota": {"limit": "10000", "interval": "5", "timeUnit": "minute" } } ] } }'
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/apiproducts" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "DeepSeek Product", "displayName": "DeepSeek Product", "approvalType": "auto", "attributes": [{"name": "access", "value": "public" } ], "environments": ["dev"], "createdAt": "1778486511834", "lastModifiedAt": "1778486511834", "operationGroup": {"operationConfigs": [{"apiSource": "AI-Analytics", "operations": [{"resource": "/" } ], "quota": {} } ], "operationConfigType": "proxy" }, "llmOperationGroup": {"operationConfigs": [{"apiSource": "AI-DeepSeek", "llmOperations": [{"resource": "/", "model": "deepseek-v3.2-maas" } ] } ] } }'
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/apiproducts" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "Qwen Product", "displayName": "Qwen Product", "approvalType": "auto", "attributes": [{"name": "access", "value": "public" } ], "environments": ["dev"], "createdAt": "1778486511834", "lastModifiedAt": "1778486511834", "operationGroup": {"operationConfigs": [{"apiSource": "AI-Analytics", "operations": [{"resource": "/" } ], "quota": {} } ], "operationConfigType": "proxy" }, "llmOperationGroup": {"operationConfigs": [{"apiSource": "AI-Qwen", "llmOperations": [{"resource": "/", "model": "qwen3-next-80b-a3b-thinking-maas" } ] } ] } }'
 
 # create test developer
-apigeecli developers create -n "test@example.com" \
-  -f "Test" -s "Developer" \
-  -u "test@example.com" -o $GOOGLE_CLOUD_PROJECT --default-token
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/developers" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"email": "test@example.com", "firstName": "Test", "lastName": "User", "userName": "test@example.com"}'
 
 # create app and get key
-export API_KEY=$(apigeecli apps create --name "AI App" \
-  --email "test@example.com" \
-  --prods "Gemini Product,DeepSeek Product,Qwen Product,Claude Product" \
-  --org $GOOGLE_CLOUD_PROJECT --default-token | jq --raw-output '.credentials[0].consumerKey')
+export API_KEY=$(curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/developers/test@example.com/apps" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"developerId": "test@example.com", "name": "AI App", "apiProducts": ["Gemini Product","DeepSeek Product","Qwen Product","Claude Product"]}' | jq --raw-output '.credentials[0].consumerKey')
 
 echo "Your API key to access the Gemini Product is: $API_KEY"

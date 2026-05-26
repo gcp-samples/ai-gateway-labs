@@ -22,7 +22,7 @@ gcloud services enable dlp.googleapis.com --project $GOOGLE_CLOUD_PROJECT
 gcloud iam service-accounts create "ai-service" --project="$GOOGLE_CLOUD_PROJECT" \
     --description="AI service account" \
     --display-name="AI Service Account"
-sleep 5
+sleep 10
 # give permissions
 gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT \
     --member="serviceAccount:ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com" \
@@ -48,3 +48,4 @@ gcloud iam service-accounts add-iam-policy-binding \
 export APIGEE_CONFIG=$(aft -c $GOOGLE_CLOUD_PROJECT)
 export APIGEE_ENVIRONMENT=$(jq -r '.environmentGroups[0].attachments[0].environment' <<< "$APIGEE_CONFIG")
 export APIGEE_HOST=$(jq -r '.environmentGroups[0].hostnames[0]' <<< "$APIGEE_CONFIG")
+export PROXY_ID="ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com"

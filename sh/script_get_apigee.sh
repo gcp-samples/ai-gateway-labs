@@ -1,5 +1,6 @@
 # get environment variables
-export APIGEE_ENVIRONMENT=$(apigeecli environments list -o $GOOGLE_CLOUD_PROJECT --default-token | jq --raw-output '.[0]')
-echo "Your Apigee environment is: $APIGEE_ENVIRONMENT"
-export APIGEE_HOST=$(apigeecli envgroups list -o $GOOGLE_CLOUD_PROJECT --default-token | jq --raw-output '.environmentGroups[0].hostnames[-1]')
-echo "Your Apigee host is: $APIGEE_HOST"
+export APIGEE_CONFIG=$(aft -c $GOOGLE_CLOUD_PROJECT)
+export APIGEE_ENVIRONMENT=$(jq -r '.environmentGroups[0].attachments[0].environment' <<< "$APIGEE_CONFIG")
+export APIGEE_HOST=$(jq -r '.environmentGroups[0].hostnames[0]' <<< "$APIGEE_CONFIG")
+export PROXY_ID="ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com"
+export API_KEY=$(curl "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/developers/test@example.com/apps/AI%20App" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" | jq --raw-output '.credentials[0].consumerKey')
