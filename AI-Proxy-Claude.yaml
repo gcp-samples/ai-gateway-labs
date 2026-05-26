@@ -2,8 +2,9 @@ name: AI-Proxy-Claude
 type: template
 description: API template for AI-Proxy-Claude
 features:
+  - cors
   - ai-auth
-  - ai-proxy-agentplatform
+  - ai-proxy-googlecloud
 parameters:
   - name: ModelBasePath
     paths:

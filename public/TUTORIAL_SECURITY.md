@@ -44,9 +44,9 @@ Run these commands to create a new template called **default-ma-template**:
 ```sh
 gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$GOOGLE_CLOUD_LOCATION.rep.googleapis.com/"
 gcloud model-armor templates create default-ma-template --project=$GOOGLE_CLOUD_PROJECT --location=$GOOGLE_CLOUD_LOCATION \
-    --rai-settings-filters='[{ "filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE" }]' \
+    --rai-settings-filters='[{ "filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "DANGEROUS", "confidenceLevel": "MEDIUM_AND_ABOVE" }]' \
     --basic-config-filter-enforcement=disabled  \
-    --pi-and-jailbreak-filter-settings-enforcement=enabled \
+    --pi-and-jailbreak-filter-settings-enforcement=disabled \
     --pi-and-jailbreak-filter-settings-confidence-level=HIGH \
     --malicious-uri-filter-settings-enforcement=enabled \
     --template-metadata-custom-llm-response-safety-error-code=798 \
@@ -64,10 +64,19 @@ gcloud model-armor templates create default-ma-template --project=$GOOGLE_CLOUD_
 
 We can again use the [aft](https://github.com/apigee/apigee-templater) to add security features (by default [**Model Armor**](https://cloud.google.com/security/products/model-armor) and [**SDP De-Identity**](https://cloud.google.com/security/products/sensitive-data-protection)) to the <walkthrough-editor-open-file filePath="AI-Proxy-Gemini.yaml">AI-Gemini Proxy</walkthrough-editor-open-file>.
 
+1. Apply the feature **ai-security** that adds **Model Armor** prompt screening:
 ```sh
 aft -i $GOOGLE_CLOUD_PROJECT:AI-Gemini -a ai-security
-apigeecli apis deploy -n AI-Gemini -e $APIGEE_ENVIRONMENT -o $GOOGLE_CLOUD_PROJECT -s ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com  --
-ovr --default-token
+```
+
+2. Apply the feature **ai-pii-masking** that adds **Sensitive Data Protection** PII masking:
+```sh
+aft -i $GOOGLE_CLOUD_PROJECT:AI-Gemini -a ai-pii-masking
+```
+
+3. **Deploy the new version:**
+```sh
+apigeecli apis deploy -n AI-Gemini -e $APIGEE_ENVIRONMENT -o $GOOGLE_CLOUD_PROJECT -s ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com  --ovr --default-token
 ```
 
 Open the proxy in the [Google Cloud Console](https://console.cloud.google.com/apigee/proxies/AI-Gemini/overview), and wait until the deployment is complete (you should see a green ✅ next to the deployment).

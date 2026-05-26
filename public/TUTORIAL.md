@@ -63,10 +63,9 @@ source .env
 
 <img src="https://iili.io/C9AvqyN.png" />
 
-This lab uses two open source CLIs to automate Apigee, [apigeecli](https://github.com/apigee/apigeecli) and [aft](https://github.com/apigee/apigee-templater), run these commands to install:
+This lab uses the [aft](https://github.com/apigee/apigee-templater) tool to automate proxy deployment, install with this command:
 
 ```sh
-curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
 npm i apigee-templater -g
 ```
 
@@ -146,7 +145,11 @@ aft -b /gemini -u https://aiplatform.googleapis.com -o $GOOGLE_CLOUD_PROJECT:AI-
 
 Open the proxy in the [Google Cloud Console](https://console.cloud.google.com/apigee/proxies/AI-Gemini/overview), and wait until the deployment is complete (you should see a green ✅ next to the deployment).
 
+![Gemini proxy deploy](https://amalbagee.web.app/apigee/ai-gemini-deploy1.png)
+
 After the deployment is complete, click on the **Debug** tab in the proxy screen, and start a debug session.
+
+![Gemini proxy debug](https://amalbagee.web.app/apigee/ai-gemini-debug1.png)
 
 Let's now call the proxy URL with our same prompt, but this time see the request processing through our proxy in Apigee. Notice the **$APIGEE_HOST** parameter in the URL, which points the request to our Apigee endpoint.
 
@@ -158,6 +161,8 @@ curl -i -X POST "https://$APIGEE_HOST/gemini/v1/projects/$GOOGLE_CLOUD_PROJECT/l
 You should get a similar response again about **'Rayleigh scattering'**. 
 
 Go back to the Debug panel, and see the processing steps, timings and variables that were done between the request and response.
+
+![Gemini proxy debug result](https://amalbagee.web.app/apigee/ai-gemini-debug2.png)
 
 ✅ Now we have a proxy in place to add governance & analytics to the AI prompt requests.
 

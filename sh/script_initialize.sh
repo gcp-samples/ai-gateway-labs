@@ -1,11 +1,18 @@
 # create data collectors
-apigeecli datacollectors create -d "Model name" -n dc_ai_model -p STRING --org "$GOOGLE_CLOUD_PROJECT" --default-token
-apigeecli datacollectors create -d "Model cost center" -n dc_ai_cost_center -p STRING --org "$GOOGLE_CLOUD_PROJECT" --default-token
-apigeecli datacollectors create -d "Total token count" -n dc_ai_total_token_count -p INTEGER --org "$GOOGLE_CLOUD_PROJECT" --default-token
-apigeecli datacollectors create -d "Prompt token count" -n dc_ai_prompt_token_count -p INTEGER --org "$GOOGLE_CLOUD_PROJECT" --default-token
-apigeecli datacollectors create -d "Total token count" -n dc_ai_response_token_count -p INTEGER --org "$GOOGLE_CLOUD_PROJECT" --default-token
-apigeecli datacollectors create -d "Model response type" -n dc_ai_response_type -p STRING --org "$GOOGLE_CLOUD_PROJECT" --default-token
-apigeecli datacollectors create -d "Time to first token" -n dc_ai_time_first_token -p INTEGER --org "$GOOGLE_CLOUD_PROJECT" --default-token
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/datacollectors" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "dc_ai_model", "description": "Model name", "type": "STRING"}'
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/datacollectors" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "dc_ai_cost_center", "description": "Model cost center", "type": "STRING"}'
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/datacollectors" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "dc_ai_total_token_count", "description": "Total token count", "type": "INTEGER"}'
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/datacollectors" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "dc_ai_prompt_token_count", "description": "Prompt token count", "type": "INTEGER"}'
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/datacollectors" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "dc_ai_response_token_count", "description": "Response token count", "type": "INTEGER"}'
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/datacollectors" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "dc_ai_response_type", "description": "Model response type", "type": "STRING"}'
+curl -X POST "https://apigee.googleapis.com/v1/organizations/$GOOGLE_CLOUD_PROJECT/datacollectors" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H 'Content-Type: application/json; charset=utf-8' \
+-d '{"name": "dc_ai_time_first_token", "description": "Time to first token (ms)", "type": "INTEGER"}'
 
 # enable APIs and create AI service account
 gcloud services enable aiplatform.googleapis.com --project $GOOGLE_CLOUD_PROJECT
@@ -38,7 +45,6 @@ gcloud iam service-accounts add-iam-policy-binding \
   --role="roles/iam.serviceAccountTokenCreator" --project $GOOGLE_CLOUD_PROJECT
 
 # get environment variables
-export APIGEE_ENVIRONMENT=$(apigeecli environments list -o $GOOGLE_CLOUD_PROJECT --default-token | jq --raw-output '.[0]')
-echo "Your Apigee environment is: $APIGEE_ENVIRONMENT"
-export APIGEE_HOST=$(apigeecli envgroups list -o $GOOGLE_CLOUD_PROJECT --default-token | jq --raw-output '.environmentGroups[0].hostnames[-1]')
-echo "Your Apigee host is: $APIGEE_HOST"
+export APIGEE_CONFIG=$(aft -c $GOOGLE_CLOUD_PROJECT)
+export APIGEE_ENVIRONMENT=$(jq -r '.environmentGroups[0].attachments[0].environment' <<< "$APIGEE_CONFIG")
+export APIGEE_HOST=$(jq -r '.environmentGroups[0].hostnames[0]' <<< "$APIGEE_CONFIG")

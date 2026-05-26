@@ -2,8 +2,9 @@ name: AI-Proxy-Gemini
 type: template
 description: API template for AI-Proxy-Gemini
 features:
+  - cors
   - ai-auth
-  - ai-proxy-agentplatform
+  - ai-proxy-googlecloud
 parameters:
   - name: ModelBasePath
     paths:
@@ -26,7 +27,7 @@ parameters:
     description: Configuration input for DeniedModelPatterns
     default: ""
     examples:
-      - flash
+      - mythos
       - pro
     maps: {}
   - name: OverrideModel
@@ -51,13 +52,13 @@ parameters:
       - google/gemini-flash-latest
     maps: {}
 endpoints:
-  - name: agentplatform
+  - name: googlecloud
     basePath: /model
     routes:
       - name: default
-        target: agentplatform
+        target: googlecloud
 targets:
-  - name: agentplatform
+  - name: googlecloud
     url: https://aiplatform.googleapis.com
     auth: GoogleAccessToken
     scopes:

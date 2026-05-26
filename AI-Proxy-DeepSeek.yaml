@@ -2,8 +2,9 @@ name: AI-Proxy-DeepSeek
 type: template
 description: API template for AI-Proxy-DeepSeek
 features:
+  - cors
   - ai-auth
-  - ai-proxy-agentplatform
+  - ai-proxy-googlecloud
 parameters:
   - name: ModelBasePath
     paths:
