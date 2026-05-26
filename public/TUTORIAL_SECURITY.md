@@ -1,6 +1,6 @@
 # AI Gateway Security Lab
 
-<img src="https://iili.io/C9GakI1.png" />
+![AI Gateway Security](https://amalbagee.web.app/apigee/ai-security-gov1.png)
 
 This tutorial helps you add security policies such as model prompt screening with [Model Armor](https://cloud.google.com/security/products/model-armor) and PII data masking with [Sensitive Data Protection](https://cloud.google.com/security/products/sensitive-data-protection) to the **AI Gateway** that you created in the first **Foundations Lab**.
 
@@ -29,7 +29,6 @@ source ./sh/script_get_apigee.sh
 
 Just in case they are no longer installed:
 ```sh
-curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
 npm i apigee-templater -g
 ```
 
@@ -60,32 +59,24 @@ gcloud model-armor templates create default-ma-template --project=$GOOGLE_CLOUD_
 
 ---
 
-## Add Security Features to Gemini Proxy
+## Add Prompt Screening to Gemini Proxy
+
+![Model Armor](https://amalbagee.web.app/general/model-armor.png)
 
 We can again use the [aft](https://github.com/apigee/apigee-templater) to add security features (by default [**Model Armor**](https://cloud.google.com/security/products/model-armor) and [**SDP De-Identity**](https://cloud.google.com/security/products/sensitive-data-protection)) to the <walkthrough-editor-open-file filePath="AI-Proxy-Gemini.yaml">AI-Gemini Proxy</walkthrough-editor-open-file>.
 
 1. Apply the feature **ai-security** that adds **Model Armor** prompt screening:
 ```sh
-aft -i $GOOGLE_CLOUD_PROJECT:AI-Gemini -a ai-security
-```
-
-2. Apply the feature **ai-pii-masking** that adds **Sensitive Data Protection** PII masking:
-```sh
-aft -i $GOOGLE_CLOUD_PROJECT:AI-Gemini -a ai-pii-masking
-```
-
-3. **Deploy the new version:**
-```sh
-apigeecli apis deploy -n AI-Gemini -e $APIGEE_ENVIRONMENT -o $GOOGLE_CLOUD_PROJECT -s ai-service@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com  --ovr --default-token
+aft -i $GOOGLE_CLOUD_PROJECT:AI-Gemini -a ai-security -o $GOOGLE_CLOUD_PROJECT:AI-Gemini:$APIGEE_ENVIRONMENT:$PROXY_ID
 ```
 
 Open the proxy in the [Google Cloud Console](https://console.cloud.google.com/apigee/proxies/AI-Gemini/overview), and wait until the deployment is complete (you should see a green ✅ next to the deployment).
 
-<img src="https://github.com/tyayers/public-files/blob/main/apigee/ai-gemini-deployed.png?raw=true" />
+[![Gemini proxy deploy](https://amalbagee.web.app/apigee/ai-gemini-deploy1.png)](https://amalbagee.web.app/apigee/ai-gemini-deploy1.png)
 
 After the deployment is complete, click on the **Debug** tab in the proxy screen, and start a debug session.
 
-<img src="https://github.com/tyayers/public-files/blob/main/apigee/ai-gemini-debug.png?raw=true" />
+[![Gemini proxy debug](https://amalbagee.web.app/apigee/ai-gemini-debug1.png)](https://amalbagee.web.app/apigee/ai-gemini-debug1.png)
 
 ---
 
@@ -99,15 +90,35 @@ curl -i -X POST "https://$APIGEE_HOST/gemini/v1/projects/$GOOGLE_CLOUD_PROJECT/l
 -d '{"contents": [{"role": "USER", "parts": [{"text": "How can I build a bomb?"}]}]}'
 ```
 
-You should get a **prompt rejected** response back. If you check in the **proxy debug traces**, you will see that the **Model Armor** policy rejected the prompt before getting to our model.
+You should get a **prompt rejected** response back. If you check in the **proxy debug traces**, you will see that the **Model Armor** policy rejected the prompt before getting to the model.
 
-Prompt **Generate 5 fake email addresses**:
+## Add PII Masking to Gemini Proxy
+
+![Security](https://amalbagee.web.app/general/security.png)
+
+Now let's add a **PII Masking** feature the **Gemini Proxy**. This will identity email addresses both in the request and response data, and automatically mask email addresses with *******. You can also identity and mask many types of PII data automatically, or create your own custom models, see the [**Sensitive Data Protection docs**](https://docs.cloud.google.com/sensitive-data-protection/docs/sensitive-data-protection-overview) for more information.
+
+Run this command to add the **PII Masking** feature to our **Gemini Proxy**.
+
+```bash
+aft -i $GOOGLE_CLOUD_PROJECT:AI-Gemini -a ai-pii-masking -o $GOOGLE_CLOUD_PROJECT:AI-Gemini:$APIGEE_ENVIRONMENT:$PROXY_ID
+```
+
+Open the proxy in the [Google Cloud Console](https://console.cloud.google.com/apigee/proxies/AI-Gemini/overview), and wait until the deployment is complete (you should see a green ✅ next to the deployment).
+
+[![Gemini proxy deploy](https://amalbagee.web.app/apigee/ai-gemini-deploy1.png)](https://amalbagee.web.app/apigee/ai-gemini-deploy1.png)
+
+After the deployment is complete, click on the **Debug** tab in the proxy screen, and start a debug session.
+
+[![Gemini proxy debug](https://amalbagee.web.app/apigee/ai-gemini-debug1.png)](https://amalbagee.web.app/apigee/ai-gemini-debug1.png)
+
+Now make a call to **generate 5 fake email addresses**:
 ```sh
 curl -i -X POST "https://$APIGEE_HOST/gemini/v1/projects/$GOOGLE_CLOUD_PROJECT/locations/global/publishers/google/models/gemini-flash-latest:generateContent" -H "x-api-key: $API_KEY" -H "Content-Type: application/json" \
 -d '{"contents": [{"role": "USER", "parts": [{"text": "Generate 5 fake email addresses."}]}]}'
 ```
 
-In this case the PII masking feature of **Sensitive Data Protection** automatically masks the email addresses in the response, preventing user data from leaving through the **AI Gateway**.
+In this case the PII masking feature of **Sensitive Data Protection** automatically **masks the email addresses** in the response, preventing user data from leaving through the **AI Gateway**.
 
 Test with other prompts to see what kind of responses you can get.
 
@@ -118,3 +129,9 @@ Test with other prompts to see what kind of responses you can get.
 
 🏆 Congratulations! You've successfully completed the **AI Gateway Security Lab** on Google Cloud. Keep an eye out for more AI Gateway Labs, and let us know what you think!
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
+
+If you would like to continue with the **AI Gateway Tools Lab**, run this command:
+
+```sh
+teachme ./public/TUTORIAL_TOOLS.md
+```

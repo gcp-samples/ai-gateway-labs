@@ -286,7 +286,9 @@ gemini -p "What does the constellation Leo look like? "
 gemini -p "What does the constellation Scorpio look like? "
 ```
 
-You should see debug traces of the conversations in Apigee, with each step of the policy & logic checks.
+You should see debug traces of the conversations in Apigee, with each step of the policy & logic checks, as well as each frame of the SSE streaming responses to the CLI client.
+
+[![Gemini CLI debug](https://amalbagee.web.app/apigee/ai-gemini-debug3.png)](https://amalbagee.web.app/apigee/ai-gemini-debug3.png)
 
 🏆 Congratulations, you have a full **AI Gateway** running in front of your **Gemini** (and many other) models!
 
@@ -297,24 +299,24 @@ You should see debug traces of the conversations in Apigee, with each step of th
 Now that we have some AI traffic flowing, let's start a local analytics dashboard (hosted in Go) to view the token & usage metrics. 
 
 ```sh
-go run .
+go run . &
 ```
 
 Take a look at the <walkthrough-editor-open-file filePath="main.go">main.go</walkthrough-editor-open-file> file to see the server code.
 
-Click on the **[Web Preview 🖵](https://docs.cloud.google.com/shell/docs/using-web-preview)** button at the top of the **Cloud Shell** page to open the dashboard and see your analytics data. 
+Click on the **[Web Preview 🖵](https://docs.cloud.google.com/shell/docs/using-web-preview)** button at the top of the **Cloud Shell** page, and then on **Preview on port 8080** link,  to open the dashboard and see your analytics data. 
 
 [![AI Gateway Analytics](https://amalbagee.web.app/apigee/ai-analytics1.png)](https://amalbagee.web.app/apigee/ai-analytics1.png)
 
-Click on the **Demo Mode** slider at the top to see what the dashboard looks like with more data from a longer timeframe.
+Click on the **Demo Mode** slider at the top to see what the dashboard looks like with more **demo data** from a longer timeframe.
 
 🏆 You now have a full **AI Gateway** analytics dashboard running in your lab environment! Make some more calls and watch as the data & usage grow 📈.
 
 ### Optional
 
-![Google Data Studio](https://amalbagee.web.app/general/data-studio.png)
+[![Google Data Studio](https://amalbagee.web.app/general/data-studio.png)](https://datastudio.google.com)
 
-You can also use [Google Data Studio](https://datastudio.google.com/) to design Apigee AI dashboards. Take a look at this [template](https://datastudio.google.com/s/nqey8Stz8rs), and as a bonus try copying it and creating your own using the [Apigee Data Source](https://docs.cloud.google.com/apigee/docs/api-platform/analytics/data-studio).
+You can also use [Google Data Studio](https://datastudio.google.com), as well as many other BI tools, to design Apigee AI dashboards. Take a look at this [template](https://datastudio.google.com/s/nqey8Stz8rs), and as a bonus try copying it and creating your own using the [Apigee Data Source](https://docs.cloud.google.com/apigee/docs/api-platform/analytics/data-studio).
 
 ---
 
