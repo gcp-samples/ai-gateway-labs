@@ -215,7 +215,7 @@ In our Gemini proxy deployment, we set a model allowed flag to **gemini**, so le
 
 ```sh
 curl -i -X POST "https://$APIGEE_HOST/gemini/v1beta1/projects/$GOOGLE_CLOUD_PROJECT/locations/global/endpoints/openapi/chat/completions" -H "x-api-key: $API_KEY" -H "Content-Type: application/json; charset=utf-8" \
--d '{"model": "aistartup/coolmodel33", "stream": true, "messages":  [{"role": "user", "content": "What does the Orion constellation look like?"}]}'
+-d '{"model": "hackernews/cool-0.1-model", "stream": true, "messages":  [{"role": "user", "content": "What does the Orion constellation look like?"}]}'
 ```
 
 You should get a **Model not allowed** response.
@@ -312,6 +312,8 @@ Click on the **Demo Mode** slider at the top to see what the dashboard looks lik
 
 ### Optional
 
+![Google Data Studio](https://amalbagee.web.app/general/data-studio.png)
+
 You can also use [Google Data Studio](https://datastudio.google.com/) to design Apigee AI dashboards. Take a look at this [template](https://datastudio.google.com/s/nqey8Stz8rs), and as a bonus try copying it and creating your own using the [Apigee Data Source](https://docs.cloud.google.com/apigee/docs/api-platform/analytics/data-studio).
 
 ---
@@ -321,3 +323,9 @@ You can also use [Google Data Studio](https://datastudio.google.com/) to design 
 
 🏆 Congratulations! You've successfully completed the **AI Gateway Foundations Lab** on Google Cloud. Keep an eye out for more AI Gateway Labs, and let us know what you think!
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
+
+If you would like to continue with the **Security Lab**, just run this command:
+
+```bash
+teachme ./public/TUTORIAL_SECURITY.md
+```
