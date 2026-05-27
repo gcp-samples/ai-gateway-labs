@@ -290,7 +290,25 @@ You should see debug traces of the conversations in Apigee, with each step of th
 
 [![Gemini CLI debug](https://amalbagee.web.app/apigee/ai-gemini-debug3.png)](https://amalbagee.web.app/apigee/ai-gemini-debug3.png)
 
-🏆 Congratulations, you have a full **AI Gateway** running in front of your **Gemini** (and many other) models!
+🎉 You now have a full **AI Gateway** running in front of your **Gemini** (and many other) models!
+
+### Optional
+
+Try configuring and using **[Claude Code](https://claude.com/product/claude-code)** with our Claude proxy by setting these variables:
+
+```sh
+export CLAUDE_CODE_USE_VERTEX=1
+export CLOUD_ML_REGION=global
+export ANTHROPIC_VERTEX_PROJECT_ID=$GOOGLE_CLOUD_PROJECT
+export ANTHROPIC_VERTEX_BASE_URL="https://$APIGEE_HOST/${UNIQUE_NAME,,}-claude/v1"
+export ANTHROPIC_CUSTOM_HEADERS="x-api-key: $API_KEY"
+```
+
+Now call **claude** with prompts and watch the debug traces for the governance policy execution.
+
+```sh
+claude -p "What are the most common constellations that are visible in the night sky in different parts of the world?"
+```
 
 ## View Analytics Data
 
@@ -299,7 +317,7 @@ You should see debug traces of the conversations in Apigee, with each step of th
 Now that we have some AI traffic flowing, let's start a local analytics dashboard (hosted in Go) to view the token & usage metrics. 
 
 ```sh
-go run . &
+go run .
 ```
 
 Take a look at the <walkthrough-editor-open-file filePath="main.go">main.go</walkthrough-editor-open-file> file to see the server code.
@@ -310,7 +328,7 @@ Click on the **[Web Preview 🖵](https://docs.cloud.google.com/shell/docs/using
 
 Click on the **Demo Mode** slider at the top to see what the dashboard looks like with more **demo data** from a longer timeframe.
 
-🏆 You now have a full **AI Gateway** analytics dashboard running in your lab environment! Make some more calls and watch as the data & usage grow 📈.
+🎉 You now have a full **AI Gateway** analytics dashboard running in your lab environment! Make some more calls and watch as the data & usage grow 📈.
 
 ### Optional
 
