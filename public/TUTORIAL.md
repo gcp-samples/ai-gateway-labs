@@ -71,7 +71,7 @@ npm i apigee-templater -g
 
 ---
 
-## Provision Apigee (if needed)
+## Provision Apigee (if not already provisioned)
 
 <img src="https://iili.io/C9A7ZD7.png" />
 
