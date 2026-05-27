@@ -51,6 +51,14 @@ parameters:
     examples:
       - google/gemini-flash-latest
     maps: {}
+  - name: ServiceAccountAuth
+    description: If a Google Cloud Service Account should be used in the proxy deployment, or not.
+    default: true
+    examples:
+      - true
+      - false
+    maps:
+      false: remove=$.targets[*].auth,$.targets[*].scopes,$.targets[*].httpTargetConnection.authentication
 endpoints:
   - name: agentplatform
     basePath: /model
