@@ -24,15 +24,9 @@ cp --update=none ./sh/env.sh .env
 3. After **saving** your changes, load the variables by running these commands:
 
 ```sh
+npm install apigee-templater -g
 source .env
 source ./sh/script_get_apigee.sh
-```
-
-### Install Tooling
-
-Just in case they are no longer installed:
-```sh
-npm i apigee-templater -g
 ```
 
 ## Provision API Hub (if not already provisioned)
@@ -53,4 +47,4 @@ source ./sh/script_hub_init.sh
 
 Provisioning usually takes 10-15 minutes.
 
-## 
+##
