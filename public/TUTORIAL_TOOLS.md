@@ -21,7 +21,7 @@ cp --update=none ./sh/env.sh .env
 
 2. **Click**  <walkthrough-editor-open-file filePath=".env">here</walkthrough-editor-open-file> to open the `.env` file in the editor.
 
-3. After **saving** your changes, load the variables by running these commands:
+3. After **saving** your changes, install the [aft tool](https://github.com/apigee/apigee-templater) and load the variables by running these commands:
 
 ```sh
 npm install apigee-templater -g
