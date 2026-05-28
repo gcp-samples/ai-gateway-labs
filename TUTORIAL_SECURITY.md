@@ -135,5 +135,5 @@ Test with other prompts to see what kind of responses you can get.
 If you would like to continue with the **AI Gateway Tools Lab**, run this command:
 
 ```sh
-teachme ./public/TUTORIAL_TOOLS.md
+teachme TUTORIAL_TOOLS.md
 ```

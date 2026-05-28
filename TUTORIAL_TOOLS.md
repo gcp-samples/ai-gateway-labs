@@ -62,7 +62,7 @@ Let's deploy an **Apigee proxy** to the REST service that enforces the **OpenAPI
 Run this command to deploy the **proxy** to your **Apigee environment**:
 
 ```sh
-aft REST-Product.yaml -o "$GOOGLE_CLOUD_PROJECT:REST-$UNIQUE_NAME-Product:$APIGEE_ENVIRONMENT" -p "BasePath=/${UNIQUE_NAME,,}-catalog"
+aft ./templates/REST-Product.yaml -o "$GOOGLE_CLOUD_PROJECT:REST-$UNIQUE_NAME-Product:$APIGEE_ENVIRONMENT" -p "BasePath=/${UNIQUE_NAME,,}-catalog"
 ```
 
 Open the **[Apigee proxies view](https://console.cloud.google.com/apigee/proxies)** and click on your proxy, wait for the deployment to complete, and then start a **Debug session**.
@@ -130,7 +130,7 @@ Now let's deploy a **proxy** to the [BigQuery MCP target](https://docs.cloud.goo
 Use this command to deploy the **MCP-BigQuery** proxy to Apigee:
 
 ```sh
-aft MCP-BigQuery.yaml -o "$GOOGLE_CLOUD_PROJECT:MCP-$UNIQUE_NAME-BigQuery:$APIGEE_ENVIRONMENT:$PROXY_SA" -p "BasePath=/${UNIQUE_NAME,,}-bigquery"
+aft ./templates/MCP-BigQuery.yaml -o "$GOOGLE_CLOUD_PROJECT:MCP-$UNIQUE_NAME-BigQuery:$APIGEE_ENVIRONMENT:$PROXY_SA" -p "BasePath=/${UNIQUE_NAME,,}-bigquery"
 ```
 
 Refresh the [API proxies](https://console.cloud.google.com/apigee/proxies) list to see the new **MCP BigQuery** proxy.

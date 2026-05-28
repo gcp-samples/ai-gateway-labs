@@ -133,8 +133,8 @@ Now let's make a direct call to the Gemini API on [Model Garden](https://cloud.g
 <img src="https://iili.io/C9TPzEF.png" height=60 />
 
 ```sh
-curl -i -X POST "https://aiplatform.googleapis.com/v1/projects/$GOOGLE_CLOUD_PROJECT/locations/global/publishers/google/models/gemini-flash-latest:generateContent" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H "Content-Type: application/json" \
--d '{"contents": [{"role": "USER", "parts": [{"text": "why is the sky blue?"}]}]}'
+curl -s -X POST "https://aiplatform.googleapis.com/v1/projects/$GOOGLE_CLOUD_PROJECT/locations/global/publishers/google/models/gemini-flash-latest:generateContent" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H "Content-Type: application/json" \
+-d '{"contents": [{"role": "USER", "parts": [{"text": "Explain why the sky is blue in one sentence."}]}]}' | jq -r '"\n\u001b[1mModel response:\u001b[0m \u001b[32m\(.candidates[0].content.parts[0].text)\u001b[0m"'
 ```
 
 You should get a response with an answer candidate with some text about **'Rayleigh scattering'**.
@@ -164,8 +164,8 @@ After the deployment is complete, click on the **Debug** tab in the proxy screen
 Let's now call the proxy URL with our same prompt, but this time see the request processing through our proxy in Apigee. Notice the **$APIGEE_HOST** parameter in the URL, which points the request to our Apigee endpoint.
 
 ```sh
-curl -i -X POST "https://$APIGEE_HOST/${UNIQUE_NAME,,}-gemini/v1/projects/$GOOGLE_CLOUD_PROJECT/locations/global/publishers/google/models/gemini-flash-latest:generateContent" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H "Content-Type: application/json" \
--d '{"contents": [{"role": "USER", "parts": [{"text": "why is the sky blue?"}]}]}'
+curl -s -X POST "https://$APIGEE_HOST/${UNIQUE_NAME,,}-gemini/v1/projects/$GOOGLE_CLOUD_PROJECT/locations/global/publishers/google/models/gemini-flash-latest:generateContent" -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" -H "Content-Type: application/json" \
+-d '{"contents": [{"role": "USER", "parts": [{"text": "Explain why the sky is blue in one sentence."}]}]}' | jq -r '"\n\u001b[1mModel response:\u001b[0m \u001b[32m\(.candidates[0].content.parts[0].text)\u001b[0m"'
 ```
 
 You should get a similar response again about **'Rayleigh scattering'**. In case you get an **OpenSSL SSL_connect** error it means that the load balancer certificate is still provisioning, so just wait a few minutes and try again until it works (can take 5-10 minutes).
@@ -187,11 +187,11 @@ The proxy definitions are YAML templates (see <walkthrough-editor-open-file file
 Deploy the AI proxy templates:
 
 ```sh
-aft AI-Proxy-Gemini.yaml -o "$GOOGLE_CLOUD_PROJECT:AI-$UNIQUE_NAME-Gemini:$APIGEE_ENVIRONMENT:$PROXY_SA" -p "ModelBasePath=/${UNIQUE_NAME,,}-gemini"
-aft AI-Proxy-DeepSeek.yaml -o "$GOOGLE_CLOUD_PROJECT:AI-$UNIQUE_NAME-DeepSeek:$APIGEE_ENVIRONMENT:$PROXY_SA" -p "ModelBasePath=/${UNIQUE_NAME,,}-deepseek"
-aft AI-Proxy-Qwen.yaml -o "$GOOGLE_CLOUD_PROJECT:AI-$UNIQUE_NAME-Qwen:$APIGEE_ENVIRONMENT:$PROXY_SA" -p "ModelBasePath=/${UNIQUE_NAME,,}-qwen"
-aft AI-Proxy-Claude.yaml -o "$GOOGLE_CLOUD_PROJECT:AI-$UNIQUE_NAME-Claude:$APIGEE_ENVIRONMENT:$PROXY_SA" -p "ModelBasePath=/${UNIQUE_NAME,,}-claude"
-aft -i AI-Analytics.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Analytics:$APIGEE_ENVIRONMENT
+aft ./templates/AI-Proxy-Gemini.yaml -o "$GOOGLE_CLOUD_PROJECT:AI-$UNIQUE_NAME-Gemini:$APIGEE_ENVIRONMENT:$PROXY_SA" -p "ModelBasePath=/${UNIQUE_NAME,,}-gemini"
+aft ./templates/AI-Proxy-DeepSeek.yaml -o "$GOOGLE_CLOUD_PROJECT:AI-$UNIQUE_NAME-DeepSeek:$APIGEE_ENVIRONMENT:$PROXY_SA" -p "ModelBasePath=/${UNIQUE_NAME,,}-deepseek"
+aft ./templates/AI-Proxy-Qwen.yaml -o "$GOOGLE_CLOUD_PROJECT:AI-$UNIQUE_NAME-Qwen:$APIGEE_ENVIRONMENT:$PROXY_SA" -p "ModelBasePath=/${UNIQUE_NAME,,}-qwen"
+aft ./templates/AI-Proxy-Claude.yaml -o "$GOOGLE_CLOUD_PROJECT:AI-$UNIQUE_NAME-Claude:$APIGEE_ENVIRONMENT:$PROXY_SA" -p "ModelBasePath=/${UNIQUE_NAME,,}-claude"
+aft -i ./templates/AI-Analytics.yaml -o $GOOGLE_CLOUD_PROJECT:AI-Analytics:$APIGEE_ENVIRONMENT
 ```
 
 Now let's create a **product** & **subscription** to the **AI-Gemini** proxy. [Products](https://docs.cloud.google.com/apigee/docs/api-platform/publish/what-api-product) and [Subscriptions](https://docs.cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api) allow user authorization and detailed quotas on things like number of tokens, calls or specific models, paths or operations.
@@ -213,7 +213,7 @@ source ./sh/script_register_key.sh
 Now let's call our model proxy with an API key as credential, that has subscribed to the **AI-Gemini** product with certain LLM token quotas. You can start a debug session again in the Apigee console if you wish to see the processing steps.
 
 ```sh
-curl -i -X POST "https://$APIGEE_HOST/${UNIQUE_NAME,,}-gemini/v1beta1/projects/$GOOGLE_CLOUD_PROJECT/locations/global/endpoints/openapi/chat/completions" -H "x-api-key: $API_KEY" -H "Content-Type: application/json; charset=utf-8" \
+curl -s -X POST "https://$APIGEE_HOST/${UNIQUE_NAME,,}-gemini/v1beta1/projects/$GOOGLE_CLOUD_PROJECT/locations/global/endpoints/openapi/chat/completions" -H "x-api-key: $API_KEY" -H "Content-Type: application/json; charset=utf-8" \
 -d '{"model": "google/gemini-flash-latest", "stream": true, "messages":  [{"role": "user", "content": "Why is the sky blue?"}]}'
 ```
 
@@ -359,5 +359,5 @@ You can also use [Google Data Studio](https://datastudio.google.com), as well as
 If you would like to continue with the **Security Lab**, just run this command:
 
 ```bash
-teachme ./public/TUTORIAL_SECURITY.md
+teachme TUTORIAL_SECURITY.md
 ```
