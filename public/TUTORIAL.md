@@ -5,7 +5,14 @@
 ---
 This tutorial guides you through provisioning an **AI Gateway** in your Google Cloud project, and then creating AI proxies to add **governance & analytics** at the gateway level to agentic tools like **Gemini CLI**, **Claude Code**, or any other AI application.
 
-Let's get started!
+### Definitions
+We will be using several terms in these labs, so here are some definitions to get started:
+
+* **Proxy**: An endpoint that receives and processes traffic before directing it to the actual **target** or backend service.
+* **Target**: The actual target service behind the **proxy**, so for example an **AI model**, **REST or MCP tool**, or an **A2A agent**.
+* More information on **proxies** and **targets** can be found [here](https://docs.cloud.google.com/apigee/docs/api-platform/fundamentals/understanding-apis-and-api-proxies#whatisanapiproxy).
+
+Let's go!
 
 ---
 
@@ -68,6 +75,8 @@ This lab uses the [aft](https://github.com/apigee/apigee-templater) tool to auto
 ```sh
 npm i apigee-templater -g
 ```
+
+Because you are logged in with the **[Google CLoud CLI (gcloud)](https://cloud.google.com/sdk)**, all of our tool calls will automatically be authenticated with **[Application Default Credentials](https://docs.cloud.google.com/docs/authentication/application-default-credentials)**.
 
 ---
 
@@ -307,8 +316,12 @@ export ANTHROPIC_CUSTOM_HEADERS="x-api-key: $API_KEY"
 Now call **claude** with prompts and watch the debug traces for the governance policy execution.
 
 ```sh
-claude -p "What are the most common constellations that are visible in the night sky in different parts of the world?"
+claude -p "Why is the sky blue?"
 ```
+
+![Claude code](https://amalbagee.web.app/general/claude1.png)
+
+All of the model communication goes through your **AI Gateway Claude Proxy** with access control through the **Claude Product**.
 
 ## View Analytics Data
 

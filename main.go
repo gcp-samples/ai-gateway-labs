@@ -801,6 +801,25 @@ func main() {
 	mux.HandleFunc("/api/projects/{projectId}/users/analytics", withCORS(userAnalyticsHandler))
 	mux.HandleFunc("/api/config", withCORS(configHandler))
 
+	// serve OpenAPI spec
+	mux.HandleFunc("/openapi", withCORS(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "public/openapi-viewer.html")
+	}))
+	mux.HandleFunc("/openapi.yaml", withCORS(func(w http.ResponseWriter, r *http.Request) {
+		content, err := os.ReadFile("openapi.yaml")
+		if err != nil {
+			http.Error(w, "Could not read OpenAPI spec", http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.Header().Set("Content-Disposition", "inline")
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		w.Header().Set("Pragma", "no-cache")
+		w.Header().Set("Expires", "0")
+		w.Write(content)
+	}))
+
 	// mock business services
 	mux.HandleFunc("/products", withCORS(productsHandler))
 	mux.HandleFunc("/products/{id}", withCORS(productsHandler))
