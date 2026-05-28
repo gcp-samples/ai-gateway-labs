@@ -100,6 +100,7 @@ These **optional parameters** can be added to the `apply` command to customize t
 
 Run these commands to provision, and type **yes** after reviewing the changes:
 ```sh
+source ./sh/script_tf_clean.sh
 cd tf/apigee
 terraform init
 terraform apply -var "project_id=$GOOGLE_CLOUD_PROJECT" -var "region=$GOOGLE_CLOUD_LOCATION" --var "apigee_type=$APIGEE_TYPE"
