@@ -272,9 +272,10 @@ curl -i -X POST "https://$APIGEE_HOST/${UNIQUE_NAME,,}-claude/v1/projects/$PROJE
 
 ![AI proxies governance](https://amalbagee.web.app/apigee/ai-proxies-gov1.png)
 
-Now let's update our terminal session with our new **Gemini Proxy** information by setting these variables:
+Now update Gemini to use Google Cloud Agent Platform (formally Vertex AI, can be changed back afterwards), as well as setting the Apigee proxy URL and key:
 
 ```sh
+jq '.security.auth.selectedType = "vertex-ai"' ~/.gemini/settings.json > tmp.json && mv tmp.json ~/.gemini/settings.json
 export GOOGLE_VERTEX_BASE_URL="https://$APIGEE_HOST/${UNIQUE_NAME,,}-gemini"
 export GEMINI_CLI_CUSTOM_HEADERS="x-api-key: $API_KEY"
 ```
