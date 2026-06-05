@@ -6,6 +6,8 @@ This tutorial helps you add security policies such as model prompt screening wit
 
 Let's get started!
 
+<walkthrough-tutorial-duration duration="15 minutes"></walkthrough-tutorial-duration>
+
 ## Setup Environment
 
 <img src="https://iili.io/C9AvqyN.png" />
@@ -32,8 +34,6 @@ Just in case they are no longer installed:
 npm i apigee-templater -g
 ```
 
----
-
 ## Model Armor Template
 
 Now we will create a **[Model Armor](https://cloud.google.com/security/products/model-armor)** template to use in our proxies. For production you can create many templates and route between them based on the user or context, however for this lab we can start with one template.
@@ -41,25 +41,9 @@ Now we will create a **[Model Armor](https://cloud.google.com/security/products/
 Run these commands to create a new template called **default-ma-template**. If you would like to use **Model Armor** in the `us` location or a specific region, set the **MA_LOCATION** variable below with any of the locations documented [here](https://docs.cloud.google.com/model-armor/locations).
 
 ```sh
-MA_LOCATION=eu
-gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MA_LOCATION.rep.googleapis.com/"
-
-gcloud model-armor templates create default-ma-template --project=$GOOGLE_CLOUD_PROJECT --location=$MA_LOCATION \
-    --rai-settings-filters='[{ "filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "DANGEROUS", "confidenceLevel": "MEDIUM_AND_ABOVE" }]' \
-    --basic-config-filter-enforcement=disabled  \
-    --pi-and-jailbreak-filter-settings-enforcement=disabled \
-    --pi-and-jailbreak-filter-settings-confidence-level=HIGH \
-    --malicious-uri-filter-settings-enforcement=enabled \
-    --template-metadata-custom-llm-response-safety-error-code=798 \
-    --template-metadata-custom-llm-response-safety-error-message="test template llm response evaluation failed" \
-    --template-metadata-custom-prompt-safety-error-code=799 \
-    --template-metadata-custom-prompt-safety-error-message="test template prompt evaluation failed" \
-    --template-metadata-ignore-partial-invocation-failures \
-    --template-metadata-log-operations \
-    --template-metadata-log-sanitize-operations
+export MA_LOCATION=eu
+source ./sh/create_ma.sh
 ```
-
----
 
 ## Add Prompt Screening to Gemini Proxy
 

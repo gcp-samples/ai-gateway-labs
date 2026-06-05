@@ -7,6 +7,8 @@ In this lab you will add tool goverance & integration to the **AI Gateway** that
 
 Let's get started!
 
+<walkthrough-tutorial-duration duration="15 minutes"></walkthrough-tutorial-duration>
+
 ---
 
 ## Set Environment Variables
