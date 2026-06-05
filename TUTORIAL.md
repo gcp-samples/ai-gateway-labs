@@ -49,6 +49,7 @@ source ./sh/initialize.sh
 ```
 
 <walkthrough-pin-section-icon></walkthrough-pin-section-icon>
+
 In case you want to set your own VPC, SUBNET or DRZ configurations, <walkthrough-editor-open-file filePath="./.env">edit</walkthrough-editor-open-file> the **.env** file manually and set the **Optional Variables** accordingly, and then run `source .env` to reload.
 
 <walkthrough-footnote>Because you are logged in with the **[Google CLoud CLI (gcloud)](https://cloud.google.com/sdk)**, all of our tool calls will automatically be authenticated with **[Application Default Credentials](https://docs.cloud.google.com/docs/authentication/application-default-credentials)**.</walkthrough-footnote>
