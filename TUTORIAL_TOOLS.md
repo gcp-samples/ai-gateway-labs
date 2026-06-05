@@ -1,15 +1,11 @@
 # AI Gateway Tools Lab
-![Gemini proxy debug](https://amalbagee.web.app/apigee/ai-tools-gov1.png)
+<walkthrough-tutorial-duration duration="15"></walkthrough-tutorial-duration>
 
----
+![Gemini proxy debug](https://amalbagee.web.app/apigee/ai-tools-gov1.png)
 
 In this lab you will add tool goverance & integration to the **AI Gateway** that you created in the first **Foundations Lab**.
 
 Let's get started!
-
-<walkthrough-tutorial-duration duration="15 minutes"></walkthrough-tutorial-duration>
-
----
 
 ## Set Environment Variables
 

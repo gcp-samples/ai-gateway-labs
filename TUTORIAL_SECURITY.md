@@ -1,12 +1,12 @@
 # AI Gateway Security Lab
 
+<walkthrough-tutorial-duration duration="15"></walkthrough-tutorial-duration>
+
 ![AI Gateway Security](https://amalbagee.web.app/apigee/ai-security-gov1.png)
 
 This tutorial helps you add security policies such as model prompt screening with [Model Armor](https://cloud.google.com/security/products/model-armor) and PII data masking with [Sensitive Data Protection](https://cloud.google.com/security/products/sensitive-data-protection) to the **AI Gateway** that you created in the first **Foundations Lab**.
 
 Let's get started!
-
-<walkthrough-tutorial-duration duration="15 minutes"></walkthrough-tutorial-duration>
 
 ## Setup Environment
 

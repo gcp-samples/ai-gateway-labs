@@ -1,10 +1,10 @@
 # AI Gateway Foundations Lab
 
+<walkthrough-tutorial-duration duration="30-60"></walkthrough-tutorial-duration>
+
 <img src="https://iili.io/C9Al3Ol.jpg" />
 
 This tutorial guides you through provisioning an **AI Gateway** in your Google Cloud project, and then creating AI proxies to add **governance & analytics** at the gateway level to agentic tools like **Gemini CLI**, **Claude Code**, or any other AI application.
-
-<walkthrough-tutorial-duration duration="30-60 minutes"></walkthrough-tutorial-duration>
 
 ### Definitions
 We will be using several terms in these labs, so here are some definitions to get started:
