@@ -1,20 +1,8 @@
-# Copyright 2026 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-name: REST-Proxy
+name: REST-Product2
 displayName: REST-Proxy
-type: feature
+type: proxy
+gateway: apigee
+schemaVersion: 1.0.0
 categories: []
 description: REST-Proxy
 documentation: ""
@@ -64,40 +52,40 @@ targets:
     flows: []
     faultRules: []
     httpTargetConnection:
-      properties: {}
-      url: https://aigw-test-service-323709580283.europe-west1.run.app/
+      Properties: {}
+      URL: https://aigw-test-service-323709580283.europe-west1.run.app/
 policies:
   - name: CORS-SetCors
     type: CORS
     content:
-      cors:
+      CORS:
         metadata:
           continueOnError: "false"
           enabled: "true"
           name: CORS-SetCors
-        displayName: CORS-SetCors
-        allowOrigins: "{request.header.origin}"
-        allowMethods: GET, PUT, POST, DELETE
-        allowHeaders: "*"
-        exposeHeaders: "*"
-        maxAge: "3628800"
-        allowCredentials: "false"
-        generatePreflightResponse: "true"
-        ignoreUnresolvedVariables: "true"
+        DisplayName: CORS-SetCors
+        AllowOrigins: "{request.header.origin}"
+        AllowMethods: GET, PUT, POST, DELETE
+        AllowHeaders: "*"
+        ExposeHeaders: "*"
+        MaxAge: "3628800"
+        AllowCredentials: "false"
+        GeneratePreflightResponse: "true"
+        IgnoreUnresolvedVariables: "true"
   - name: OAS-Validation
     type: OASValidation
     content:
-      oasValidation:
+      OASValidation:
         metadata:
           continueOnError: "false"
           enabled: "true"
           name: OAS-Validation
-        displayName: OAS-Validation
-        properties: {}
-        source: request
-        oasResource: oas://openapi.yaml
-        options:
-          validateMessageBody: "true"
+        DisplayName: OAS-Validation
+        Properties: {}
+        Source: request
+        OASResource: oas://openapi.yaml
+        Options:
+          ValidateMessageBody: "true"
 resources:
   - name: openapi.yaml
     type: oas

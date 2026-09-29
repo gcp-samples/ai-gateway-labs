@@ -5,10 +5,10 @@ echo "Your GOOGLE_CLOUD_PROJECT: $GOOGLE_CLOUD_PROJECT"
 
 # install aft, if not already installed
 if ! aft -v 2>/dev/null | grep -q "Apigee Feature Templater"; then
-    npm i apigee-templater -g
+    curl -fsSL https://raw.githubusercontent.com/apigee/apigee-templater/main/install.sh | sh
 fi
 
-export APIGEE_CONFIG=$(aft -c $GOOGLE_CLOUD_PROJECT)
+export APIGEE_CONFIG=$(aft describe --project $GOOGLE_CLOUD_PROJECT -f json)
 export APIGEE_ENVIRONMENT=$(jq -r '.environmentGroups[0].attachments[0].environment' <<< "$APIGEE_CONFIG")
 echo "Your APIGEE_ENVIRONMENT: $APIGEE_ENVIRONMENT"
 export APIGEE_HOST=$(jq -r '.environmentGroups[0].hostnames[0]' <<< "$APIGEE_CONFIG")

@@ -1,20 +1,8 @@
-# Copyright 2026 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-name: MCP-BigQuery
+name: MCP-BigQuery2
 displayName: MCP-BigQuery
-type: feature
+type: proxy
+gateway: apigee
+schemaVersion: 1.0.0
 categories: []
 description: MCP-BigQuery
 documentation: ""
@@ -50,99 +38,99 @@ targets:
     flows: []
     faultRules: []
     httpTargetConnection:
-      properties: {}
-      url: https://bigquery.googleapis.com
-      authentication:
-        googleAccessToken:
-          scopes:
-            scope: https://www.googleapis.com/auth/cloud-platform
+      Properties: {}
+      URL: https://bigquery.googleapis.com
+      Authentication:
+        GoogleAccessToken:
+          Scopes:
+            Scope: https://www.googleapis.com/auth/cloud-platform
 policies:
-  - name: AM-RemoveKey
-    type: AssignMessage
-    content:
-      assignMessage:
-        metadata:
-          continueOnError: "false"
-          enabled: "true"
-          name: AM-RemoveKey
-        displayName: AM-RemoveKey
-        properties: {}
-        remove:
-          headers:
-            header:
-              metadata:
-                name: x-api-key
-        ignoreUnresolvedVariables: "true"
-        assignTo:
-          metadata:
-            createNew: "false"
-            transport: http
-            type: request
-  - name: CORS-SetCors
-    type: CORS
-    content:
-      cors:
-        metadata:
-          continueOnError: "false"
-          enabled: "true"
-          name: CORS-SetCors
-        displayName: CORS-SetCors
-        allowOrigins: "{request.header.origin}"
-        allowMethods: GET, PUT, POST, DELETE
-        allowHeaders: "*"
-        exposeHeaders: "*"
-        maxAge: "3628800"
-        allowCredentials: "false"
-        generatePreflightResponse: "true"
-        ignoreUnresolvedVariables: "true"
-  - name: PP-ParsePayload
-    type: ParsePayload
-    content:
-      parsePayload:
-        metadata:
-          async: "false"
-          continueOnError: "false"
-          enabled: "true"
-          name: PP-ParsePayload
-        displayName: PP-ParsePayload
-        source: request
-        payloadType: JSON-RPC-2.0
-        protocol: MCP
   - name: Q-EnforceQuota
     type: Quota
     content:
-      quota:
+      Quota:
         metadata:
           continueOnError: "false"
           enabled: "true"
           name: Q-EnforceQuota
           type: calendar
-        displayName: Q-EnforceQuota
-        properties: {}
-        useQuotaConfigInApiProduct:
+        DisplayName: Q-EnforceQuota
+        Properties: {}
+        UseQuotaConfigInAPIProduct:
           metadata:
             stepName: VA-VerifyKey
-          defaultConfig:
-            allow: "1000"
-            interval: "1"
-            timeUnit: minute
-        distributed: "false"
-        synchronous: "false"
-        startTime: 2013-08-21 10:00:00
-        asynchronousConfiguration:
-          syncIntervalInSeconds: "20"
-          syncMessageCount: "5"
+          DefaultConfig:
+            Allow: "1000"
+            Interval: "1"
+            TimeUnit: minute
+        Distributed: "false"
+        Synchronous: "false"
+        StartTime: 2013-08-21 10:00:00
+        AsynchronousConfiguration:
+          SyncIntervalInSeconds: "20"
+          SyncMessageCount: "5"
+  - name: AM-RemoveKey
+    type: AssignMessage
+    content:
+      AssignMessage:
+        metadata:
+          continueOnError: "false"
+          enabled: "true"
+          name: AM-RemoveKey
+        DisplayName: AM-RemoveKey
+        Properties: {}
+        Remove:
+          Headers:
+            Header:
+              metadata:
+                name: x-api-key
+        IgnoreUnresolvedVariables: "true"
+        AssignTo:
+          metadata:
+            createNew: "false"
+            transport: http
+            type: request
+  - name: PP-ParsePayload
+    type: ParsePayload
+    content:
+      ParsePayload:
+        metadata:
+          async: "false"
+          continueOnError: "false"
+          enabled: "true"
+          name: PP-ParsePayload
+        DisplayName: PP-ParsePayload
+        Source: request
+        PayloadType: JSON-RPC-2.0
+        Protocol: MCP
+  - name: CORS-SetCors
+    type: CORS
+    content:
+      CORS:
+        metadata:
+          continueOnError: "false"
+          enabled: "true"
+          name: CORS-SetCors
+        DisplayName: CORS-SetCors
+        AllowOrigins: "{request.header.origin}"
+        AllowMethods: GET, PUT, POST, DELETE
+        AllowHeaders: "*"
+        ExposeHeaders: "*"
+        MaxAge: "3628800"
+        AllowCredentials: "false"
+        GeneratePreflightResponse: "true"
+        IgnoreUnresolvedVariables: "true"
   - name: VA-VerifyKey
     type: VerifyAPIKey
     content:
-      verifyApiKey:
+      VerifyAPIKey:
         metadata:
           continueOnError: "false"
           enabled: "true"
           name: VA-VerifyKey
-        displayName: VA-VerifyKey
-        properties: {}
-        apiKey:
+        DisplayName: VA-VerifyKey
+        Properties: {}
+        APIKey:
           metadata:
             ref: request.header.x-api-key
 resources: []
