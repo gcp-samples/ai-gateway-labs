@@ -15,7 +15,7 @@ These labs guide you through creating an AI Gateway on Google Cloud leveraging [
 If you are running this lab, you can deploy all of the proxies, products & assets to your own Apigee X org with this command, which can be useful to demonstrate the proxies in a production-like environment. If you are a Googler, then you can access a production deployment [here](https://console.cloud.google.com?project=bap-emea-apigee-7).
 
 ```sh
-aft apigee-demployment.yaml --project YOUR_PROJECT_ID --env YOUR_APIGEE_ENV --sa YOUR_SA_ACCOUNT
+aft https://raw.githubusercontent.com/gcp-samples/ai-gateway-labs/refs/heads/main/apigee-deployment.yaml --project YOUR_PROJECT_ID --env YOUR_APIGEE_ENV --sa YOUR_SA_ACCOUNT
 ```
 
 ## Labs
