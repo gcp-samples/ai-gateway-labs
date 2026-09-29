@@ -1,0 +1,290 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/apigee/apigee-templater/main/schema/gateway.schema.1.0.json
+gateway: apigee
+schemaVersion: 1.0.0
+name: deployment-1
+type: deployment
+parameters:
+  - name: GoogleCloudProject
+    default: "{GOOGLE_CLOUD_PROJECT}"
+templates:
+  - REST-AI-Interactions
+  - REST-AI-GenerateContent
+  - REST-AI-Messages
+  - REST-AI-Completions
+  - REST-AI-Embeddings
+proxies: []
+products:
+- name: test-product
+  displayName: Test Product
+  type: product
+  gateway: apigee
+  schemaVersion: 1.0.0
+  description: Test Product
+  access: public
+  approvalType: auto
+  environments:
+    - default-dev
+    - test
+  proxies:
+    - TestProxy
+    - REST-AI-Completions
+    - REST-AI-Interactions
+    - REST-AI-GenerateContent
+    - REST-AI-Messages
+    - REST-AI-Embeddings
+  apiResources:
+    - /
+    - /*
+    - /**
+  quota: "50000"
+  quotaInterval: "1"
+  quotaTimeUnit: month
+  scopes: []
+  operations: []
+  llmOperations:
+    - apiSource: REST-AI-Completions
+      operations:
+        - name: /
+          methods:
+            - POST
+          model: gemini-3.8-flash
+        - name: /
+          methods:
+            - POST
+          model: gemini-3.5-flash-lite
+    - apiSource: REST-AI-Interactions
+      operations:
+        - name: /
+          methods:
+            - POST
+          model: gemini-3.8-flash
+        - name: /
+          methods:
+            - POST
+          model: gemini-3.5-flash-lite
+    - apiSource: REST-AI-GenerateContent
+      operations:
+        - name: /
+          methods:
+            - POST
+          model: gemini-3.8-flash
+        - name: /
+          methods:
+            - POST
+          model: gemini-3.5-flash-lite
+    - apiSource: REST-AI-Messages
+      operations:
+        - name: /
+          methods:
+            - POST
+          model: claude-sonnet-5
+        - name: /
+          methods:
+            - POST
+          model: gemini-3.5-flash-lite
+  payloadOperations: []
+  graphqlOperations: []
+  grpcOperations: []
+kvms:
+  - name: AI-Config
+    type: environment
+    values:
+      GeminiApiKey: "{GEMINI_API_KEY}"
+users:
+- name: test@example.com
+  displayName: ""
+  type: user
+  gateway: apigee
+  schemaVersion: 1.0.0
+  email: test@example.com
+  firstName: Test
+  lastName: User
+  userName: test@example.com
+  status: active
+  attributes: []
+  apps:
+    - name: Test App
+      displayName: Test App
+      description: ""
+      callbackUrl: ""
+      status: approved
+      products:
+        - test-product
+      scopes: []
+      attributes: []
+      credentials:
+        - consumerKey: test-app-key-123
+          consumerSecret: test-app-secret-123
+          status: approved
+          issuedAt: "1788775511054"
+          expiresAt: "-1"
+          products:
+            - test-product
+          scopes: []
+          attributes: []
+tests:
+  - name: interactions-test1
+    description: Tests the Gemini Interactions API
+    documentation: |
+      ### Overview
+      The **Interactions API** (`/v1beta/interactions`) provides a stateful, multi-turn AI gateway endpoint for agentic workflows and direct model interaction.
+
+      ### Apigee Gateway Flow
+      1. **API Key Verification (`VA-VerifyKey`)**:
+         - Extracts the client's `x-api-key` header (`test-app-key-123`).
+         - Validates the key against the local Cassandra datastore table `kms_hybrid_hybrid.app_credential`.
+         - Ensures the associated API Product (`test-product`) has authorized access to `REST-AI-Interactions`.
+      2. **Token Quota Enforcement (`LTQ-QuotaEnforce`)**:
+         - Evaluates token consumption limits against the client's quota tier (50,000 tokens/min).
+      3. **Backend IAM Authentication (`AM-SetGoogleToken`)**:
+         - Eliminates the need to distribute raw Google Cloud service account keys to client applications.
+         - The gateway injects a secure, short-lived OAuth Bearer token before routing to Vertex AI upstream.
+
+      ### What to Verify in the Runtime Tester
+      - **HTTP 200 Status**: Confirm end-to-end authentication and model response generation.
+      - **Gateway Headers**: Notice `x-apigee-proxy`, `x-apigee-target-latency`, and `x-apigee-tracking-id`.
+      - **Response Payload**: Inspect `steps[].content` containing the model output and `usage.total_tokens`.
+    proxy: REST-AI-Interactions
+    path: /v1beta/interactions
+    method: POST
+    headers:
+      x-api-key: test-app-key-123
+    body: |
+      {
+        "model": "gemini-3.5-flash-lite",
+        "input": "What is the capital of France?"
+      }
+    assertions:
+      - response.status == 200
+  - name: completions-test1
+    description: This tests the completions API.
+    documentation: |
+      ### Overview
+      The **Completions API** (`/v1/chat/completions`) exposes an **OpenAI-compatible** interface backed by Google Gemini and Vertex AI models. This allows any existing OpenAI SDK, LangChain, or LlamaIndex application to switch to Gemini simply by changing the `baseURL`.
+
+      ### Apigee Gateway Flow & Key Features
+      1. **Model Virtualization**:
+         - Accepts OpenAI standard format (`messages`, `model`, `stream`, `max_tokens`).
+         - Maps model identifier `google/gemini-3.5-flash-lite` to Google Vertex AI.
+      2. **Zero-Downtime Failover (`SC-Failover-GoogleCloud-OAI`)**:
+         - If the primary provider experiences transient 5xx errors or rate limiting, Apigee's `DefaultFaultRule` triggers a failover service callout (`SC-Failover-GoogleCloud-OAI`).
+         - `JS-SetFailoverResponse` intercepts the error and returns a normalized response without breaking the client application.
+      3. **Streaming Support (SSE)**:
+         - Handles Server-Sent Events (`stream: true`) transparently through Apigee's EventFlow.
+
+      ### What to Verify in the Runtime Tester
+      - **OpenAI Schema**: Confirm standard `choices[0].message.content` output.
+      - **Trace Timeline**: Review policy execution order and observe the failover fault rule capabilities.
+    proxy: REST-AI-Completions
+    path: /v1/chat/completions
+    method: POST
+    headers:
+      x-api-key: test-app-key-123
+    body: |
+      {
+        "model": "google/gemini-3.5-flash-lite",
+        "stream": true,
+        "max_tokens": 100,
+        "messages": [{
+          "role": "user",
+          "content": "Why is the sky blue?"
+        }]
+      }
+    assertions:
+      - response.status == 200
+  - name: generatecontent-test1
+    description: This tests the GenerateContent API.
+    documentation: |
+      ### Overview
+      The **GenerateContent API** represents the native Google Cloud Vertex AI Publisher Model interface. It supports multimodal inputs (text, images, audio, video) and structured generation schemas.
+
+      ### Apigee Gateway Flow
+      1. **Dynamic URL Rewriting & Parameterization**:
+         - The path `/v1/projects/{GOOGLE_CLOUD_PROJECT}/locations/global/publishers/google/models/gemini-3.5-flash-lite:generateContent` is dynamically resolved using gateway environment variables.
+         - Isolates enterprise project IDs and regions from client awareness.
+      2. **Centralized Enterprise Governance**:
+         - Applies rate limiting, corporate auditing, and Data Collectors for prompt/response telemetry.
+         - Enforces organizational guardrails before requests reach the core LLM infrastructure.
+
+      ### What to Verify in the Runtime Tester
+      - **Native Vertex AI Schema**: Verify `contents[].role` and `contents[].parts[].text` structure.
+      - **Latency Breakdown**: Observe how Apigee adds minimal overhead (<5ms) while providing enterprise security and monitoring.
+    proxy: REST-AI-GenerateContent
+    path: /v1/projects/{GOOGLE_CLOUD_PROJECT}/locations/global/publishers/google/models/gemini-3.5-flash-lite:generateContent
+    method: POST
+    headers:
+      x-api-key: test-app-key-123
+    body: |
+      {
+        "contents": [
+          {
+            "role": "USER",
+            "parts": [
+              {
+                "text": "why is the sky blue?"
+              }
+            ]
+          }
+        ]
+      }
+    assertions:
+      - response.status == 200
+  - name: messages-test1
+    description: This tests the Messages API.
+    documentation: |
+      ### Overview
+      The **Messages API** (`/v1/messages`) implements the **Anthropic Claude API specification** on top of Google Cloud's AI infrastructure.
+
+      ### Apigee Gateway Flow
+      1. **SDK Interoperability**:
+         - Enables tools and agent frameworks written for Anthropic Claude (such as Anthropic Computer Use or Claude Code tools) to route directly through your Apigee gateway.
+      2. **Header Normalization & Verification**:
+         - Validates consumer credentials passed in `x-api-key`.
+         - Normalizes vendor-specific versioning headers (e.g. `anthropic-version`).
+
+      ### What to Verify in the Runtime Tester
+      - **Cross-Vendor Compatibility**: Verify that the gateway accepts Anthropic message formats and successfully returns structured model generations.
+    proxy: REST-AI-Messages
+    path: /v1/messages
+    method: POST
+    headers:
+      x-api-key: test-app-key-123
+    body: |
+      {
+        "model": "google/gemini-3.5-flash-lite",
+        "stream": true,
+        "max_tokens": 100,
+        "messages": [{
+          "role": "user",
+          "content": "Why is the sky blue?"
+        }]
+      }
+    assertions:
+      - response.status == 200
+  - name: embeddings-test1
+    description: This tests the Embeddings API.
+    documentation: |
+      ### Overview
+      The **Embeddings API** (`/v1/embeddings`) transforms text strings into high-dimensional vector representations. It is a critical component for Retrieval-Augmented Generation (RAG), semantic vector search, and recommendation systems.
+
+      ### Apigee Gateway Flow
+      1. **Vector Service Routing**:
+         - Routes requests to `google/gemini-embedding-2` model endpoints.
+         - Optimizes payload size and supports batch embedding requests.
+      2. **Performance Caching Potential**:
+         - Embeddings are deterministic for identical input strings; Apigee policies can cache embedding vectors at the edge to reduce backend costs to zero for frequent queries.
+
+      ### What to Verify in the Runtime Tester
+      - **Vector Response Format**: Verify generation of floating-point embedding arrays.
+      - **Zero Header Setup**: Notice how default product policies handle authentication and routing smoothly.
+    proxy: REST-AI-Embeddings
+    path: /v1/embeddings
+    method: POST
+    headers: {}
+    body: |
+      {
+        "model": "google/gemini-embedding-2",
+        "input": "This is a test sentence to embed."
+      }
+    assertions:
+      - response.status == 200
