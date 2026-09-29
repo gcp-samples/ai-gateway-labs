@@ -1,0 +1,137 @@
+name: MCP-BigQuery2
+displayName: MCP-BigQuery
+type: proxy
+gateway: apigee
+schemaVersion: 1.0.0
+categories: []
+description: MCP-BigQuery
+documentation: ""
+parameters:
+  - name: BasePath
+    paths:
+      - $.endpoints[:1].basePath
+    description: The base path to offer the proxy on.
+    default: /bigquery
+    examples: []
+endpoints:
+  - name: default
+    basePath: /bigquery
+    routes:
+      - name: default
+        target: default
+    flows:
+      - name: PreFlow
+        mode: Request
+        steps:
+          - name: CORS-SetCors
+          - name: PP-ParsePayload
+          - name: VA-VerifyKey
+          - name: AM-RemoveKey
+          - name: Q-EnforceQuota
+    faultRules: []
+targets:
+  - name: default
+    url: https://bigquery.googleapis.com
+    auth: GoogleAccessToken
+    scopes:
+      - https://www.googleapis.com/auth/cloud-platform
+    flows: []
+    faultRules: []
+    httpTargetConnection:
+      Properties: {}
+      URL: https://bigquery.googleapis.com
+      Authentication:
+        GoogleAccessToken:
+          Scopes:
+            Scope: https://www.googleapis.com/auth/cloud-platform
+policies:
+  - name: Q-EnforceQuota
+    type: Quota
+    content:
+      Quota:
+        metadata:
+          continueOnError: "false"
+          enabled: "true"
+          name: Q-EnforceQuota
+          type: calendar
+        DisplayName: Q-EnforceQuota
+        Properties: {}
+        UseQuotaConfigInAPIProduct:
+          metadata:
+            stepName: VA-VerifyKey
+          DefaultConfig:
+            Allow: "1000"
+            Interval: "1"
+            TimeUnit: minute
+        Distributed: "false"
+        Synchronous: "false"
+        StartTime: 2013-08-21 10:00:00
+        AsynchronousConfiguration:
+          SyncIntervalInSeconds: "20"
+          SyncMessageCount: "5"
+  - name: AM-RemoveKey
+    type: AssignMessage
+    content:
+      AssignMessage:
+        metadata:
+          continueOnError: "false"
+          enabled: "true"
+          name: AM-RemoveKey
+        DisplayName: AM-RemoveKey
+        Properties: {}
+        Remove:
+          Headers:
+            Header:
+              metadata:
+                name: x-api-key
+        IgnoreUnresolvedVariables: "true"
+        AssignTo:
+          metadata:
+            createNew: "false"
+            transport: http
+            type: request
+  - name: PP-ParsePayload
+    type: ParsePayload
+    content:
+      ParsePayload:
+        metadata:
+          async: "false"
+          continueOnError: "false"
+          enabled: "true"
+          name: PP-ParsePayload
+        DisplayName: PP-ParsePayload
+        Source: request
+        PayloadType: JSON-RPC-2.0
+        Protocol: MCP
+  - name: CORS-SetCors
+    type: CORS
+    content:
+      CORS:
+        metadata:
+          continueOnError: "false"
+          enabled: "true"
+          name: CORS-SetCors
+        DisplayName: CORS-SetCors
+        AllowOrigins: "{request.header.origin}"
+        AllowMethods: GET, PUT, POST, DELETE
+        AllowHeaders: "*"
+        ExposeHeaders: "*"
+        MaxAge: "3628800"
+        AllowCredentials: "false"
+        GeneratePreflightResponse: "true"
+        IgnoreUnresolvedVariables: "true"
+  - name: VA-VerifyKey
+    type: VerifyAPIKey
+    content:
+      VerifyAPIKey:
+        metadata:
+          continueOnError: "false"
+          enabled: "true"
+          name: VA-VerifyKey
+        DisplayName: VA-VerifyKey
+        Properties: {}
+        APIKey:
+          metadata:
+            ref: request.header.x-api-key
+resources: []
+tests: []

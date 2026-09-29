@@ -1,28 +1,61 @@
 # AI Gateway Labs on Google Cloud
-These labs guide you through creating an AI Gateway on Google Cloud leveraging [Apigee AI Gateway](https://cloud.google.com/solutions/apigee-ai). In these labs the AI Gateway will be using models from the [Gemini Enterprise Model Garden](https://cloud.google.com/model-garden), but can also proxy / integrate models from any provider.
+These labs guide you through creating an AI Gateway on Google Cloud leveraging [Apigee](https://cloud.google.com/solutions/apigee-ai), [Model Garden](https://cloud.google.com/model-garden), [Google Cloud Networking](https://docs.cloud.google.com/docs/networking) and [Security Services](https://docs.cloud.google.com/docs/security/overview/whitepaper) to secure & govern AI traffic to and from models, tools and agents. This approach integrates easily into [Gemini Enterprise Agent Platform](https://docs.cloud.google.com/gemini-enterprise-agent-platform) and [Agent Gateway](https://docs.cloud.google.com/gemini-enterprise-agent-platform/govern/gateways/agent-gateway-overview), as well as to any other models, tools or agent platforms, as well as to [multi-cloud or on-premise](https://cloud.google.com/apigee/hybrid) environments.
 
 ![AI Gateway Overview](https://iili.io/Bm91xHB.png)
 
-## Resources Used
-* The [Apigee Emulator](https://docs.cloud.google.com/apigee/docs/api-platform/local-development/vscode/manage-apigee-emulator) will be used, running in a [Google Cloud Run](https://cloud.google.com/run) container. You can deploy your own emulator and lab environment for testing using this [guide](https://discuss.google.dev/t/tutorial-automated-testing-of-apigee-proxies-and-deployments-with-the-apigee-emulator).
-* [Apigee Templates](https://github.com/gcp-samples/apigee-template-repository) are used for AI proxy deployments.
-* [Apigee Feature Templater (aft)](https://github.com/apigee/apigee-templater) is used as deployment tool.
+## Google Services used
+* [Apigee](https://cloud.google.com/solutions/apigee-ai) - Apigee is used as the gateway, either running natively on Google Cloud, or as a hybrid deployment in Kubernetes.
+* [Gemini Enterprise Model Garden](https://cloud.google.com/model-garden) - Highly efficient model hosting, from SOTA frontier models to leading open source and open weight models.
+* [Model Armor](https://cloud.google.com/security/products/model-armor) - Google Cloud Model Armor is used to screen prompts and responses for objectionable content with flexible templates.
+*  [Sensitive Data Protection](https://cloud.google.com/security/products/sensitive-data-protection) - Sensitive Data Protection is used to mask PII or other senstitive data from requests and responses.
+* [Google Cload Networking](https://docs.cloud.google.com/docs/networking) - High performance [Load Balancers](https://docs.cloud.google.com/load-balancing/docs/load-balancing-overview) are used for ingress and TLS termination, as well as [Private Service Connect](https://docs.cloud.google.com/vpc/docs/private-service-connect) for low-latency, internal traffic & model routing.
 
 ## Prerequisites
-* None! The labs run completely in the browser using the Apigee Emulator.
+To run these labs you will need:
+* A pre-created [Google Cloud sandbox project](https://docs.cloud.google.com/resource-manager/docs/creating-managing-projects) with either the role **roles/owner**, or these roles assigned: **apigee.admin, apihub.admin, serviceusage.serviceUsageAdmin, iam.serviceAccountAdmin, iam.serviceAccountUser, compute.admin, compute.networkAdmin, cloudkms.admin, ml.admin, cloudaicompanion.user, modelarmor.admin**.
 
-## Notes For Instructors
-If you are running this lab, you can deploy all of the proxies, products & assets to your own Apigee X org with this command, which can be useful to demonstrate the proxies in a production-like environment. If you are a Googler, then you can access a production deployment [here](https://console.cloud.google.com?project=bap-emea-apigee-7).
+## Cloud Shell labs
 
-```sh
-aft apigee-demployment.yaml --project YOUR_PROJECT_ID --env YOUR_APIGEE_ENV --sa YOUR_SA_ACCOUNT
-```
+The labs are organized as [Google Cloud Shell Tutorials](https://docs.cloud.google.com/shell/docs/cloud-shell-tutorials/tutorials), and can run interactively in your own project.
 
-## Labs
-1. Open the labs here: https://apigee-emulator-ghfontasua-ew.a.run.app/labs.
-2. Register with your name, and test & trace the model APIs **Interactions API**, **Completions API**, **Generate Content API**, **Messages API** and the **Embeddings API**.
-3. Test **Model Security** using [Google Cloud Model Armor]().
-4. Test **Model Failover** using [Apigee Fault Rules]().
-5. Test **Smart Model** routing using [Apigee Evals]().
-6. Test **MCP Authorization** on a demo MCP server using [Apigee MCP Support]().
-7. Visualize **AI Analytics** using [Apigee Analytics]().
+### 👟 AI Gateway Foundations Lab (⏱ 30-60 min)
+
+In this lab you will:
+* Provision with **Terraform**, or just use an existing, **Apigee X** instance (either as Evaluation, Pay-as-you-go, or Subscription) in your chosen Google Cloud project and region, using either the **global** or **regional DRZ** (US, EU, IN) control planes.
+* Deploy **AI proxy YAML templates** to models in your project's [Model Garden](https://cloud.google.com/model-garden) (Gemini, Claude, DeepSeek, Qwen, etc...).
+* Create **AI Products** for Gemini, Claude, DeepSeek and Qwen models, add **authorization and governance** to the proxies, including allowed and failover models.
+* Use the AI Gateway as proxy in [Gemini CLI](https://geminicli.com/) and [Claude Code](https://claude.com/product/claude-code) for local CLI usage.
+* View analytics usage of each model, for example counts of **prompt tokens**, **response tokens**, **time-to-first-token**, **latency**, etc...
+
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/gcp-samples/ai-gateway-labs&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=TUTORIAL.md)
+
+Direct [markdown](https://github.com/gcp-samples/ai-gateway-labs/blob/main/TUTORIAL.md) link.
+
+---
+
+### 🔐 AI Gateway Security Lab (⏱ 15-30 min)
+
+In this lab you will:
+* Create a **Model Armor** template and add it to your AI proxies.
+* Add **Sensitive Data Protection** PII data masking feature to your AI proxies.
+* Test the AI proxy endpoints with malicious prompts and verify that the prompts are blocked.
+* Test the AI proxy endpoints with PII personal data.
+
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/gcp-samples/ai-gateway-labs&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=TUTORIAL_SECURITY.md)
+
+Direct [markdown](https://github.com/gcp-samples/ai-gateway-labs/blob/main/TUTORIAL_SECURITY.md) link.
+
+---
+
+### 🛠 AI Gateway Tools Lab (⏱ 15-30 min)
+
+In this lab you will:
+* Deploy a **REST Product Catalog** proxy to be used as an **API tool**.  
+* View the **API Hub** models & tools catalog with all of the deployed proxies.  
+* Create an **Apigee MCP Discovery Proxy** that adds an MCP transcription endpoint with mapping to the **REST Product Catalog** service, and test in **MCP Inspector** or in the terminal.  
+* Create an **MCP Proxy** to the existing **BigQuery MCP service**, adding **authorization & tool validation** to the proxy.  
+* Observe MCP tool analytics in the Apigee dashboards, Google Cloud logs & monitoring.
+
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/gcp-samples/ai-gateway-labs&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=TUTORIAL_TOOLS.md)
+
+Direct [markdown](https://github.com/gcp-samples/ai-gateway-labs/blob/main/TUTORIAL_TOOLS.md) link.
