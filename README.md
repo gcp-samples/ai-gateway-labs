@@ -8,15 +8,17 @@ These labs guide you through creating an AI Gateway on Google Cloud leveraging [
 * [Apigee Templates](https://github.com/gcp-samples/apigee-template-repository) are used for AI proxy deployments.
 * [Apigee Feature Templater (aft)](https://github.com/apigee/apigee-templater) is used as deployment tool.
 
-## Prerequisites
-* None! The labs run completely in the browser using the Apigee Emulator.
+## Apigee Emulator Cloud Run Deployment
+* The labs run completely in the browser using the Apigee Emulator here: https://apigee-emulator-ghfontasua-ew.a.run.app/tester.
 
-## Notes For Instructors
-If you are running this lab, you can deploy all of the proxies, products & assets to your own Apigee X org with this command, which can be useful to demonstrate the proxies in a production-like environment. If you are a Googler, then you can access a production deployment [here](https://console.cloud.google.com?project=bap-emea-apigee-7).
+## Apigee X or Hybrid Deployment
+If you would rather use an Apigee X or Hybrid org, then you can deploy all of the proxies, products & assets to your own Apigee X org with this command, which can be useful to demonstrate the proxies in a production-like environment. If you are a Googler, then you can access a production deployment [here](https://console.cloud.google.com?project=bap-emea-apigee-7).
 
 ```sh
 aft https://raw.githubusercontent.com/gcp-samples/ai-gateway-labs/refs/heads/main/apigee-deployment.yaml --project YOUR_PROJECT_ID --env YOUR_APIGEE_ENV --sa YOUR_SA_ACCOUNT
 ```
+
+The YOUR_SA_ACCOUNT must be a service account email with at least the **roles/aiplatform.user**, **roles/modelarmor.user** and **roles/dlp.user** roles.
 
 ## Labs
 1. Open the labs here: https://apigee-emulator-ghfontasua-ew.a.run.app/labs.
