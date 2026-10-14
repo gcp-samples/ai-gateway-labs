@@ -12,18 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/* Variables */
-
-variable "project_id" {
-  description = "Project id (also used for the Apigee Organization)."
-  type        = string
-}
-
-variable "region" {
-  description = "GCP region for the Apigee runtime & analytics data."
-  type        = string
-}
-
 /* API Hub */
 
 resource "google_apihub_host_project_registration" "apihub_host_project" {
@@ -40,8 +28,7 @@ resource "google_project_service_identity" "apihub_service_identity" {
 }
 
 resource "google_project_iam_member" "apihub_service_identity_permission" {
-  provider = google-beta
-  project  = var.project_id
+  project = var.project_id
   for_each = toset([
     "roles/apihub.admin",
     "roles/apihub.runtimeProjectServiceAgent"
@@ -52,7 +39,6 @@ resource "google_project_iam_member" "apihub_service_identity_permission" {
 }
 
 resource "google_apihub_api_hub_instance" "apihub-instance" {
-  provider = google-beta
   project  = var.project_id
   location = var.region
   config {
