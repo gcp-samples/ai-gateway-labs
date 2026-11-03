@@ -1,5 +1,5 @@
 # AI Gateway Labs on Google Cloud
-These labs guide you through creating an AI Gateway on Google Cloud leveraging [Apigee AI Gateway](https://cloud.google.com/solutions/apigee-ai). In these labs the AI Gateway will be using models from the [Gemini Enterprise Model Garden](https://cloud.google.com/model-garden), but can also proxy / integrate models from any provider.
+This lab guides you through creating an AI Gateway on Google Cloud leveraging [Apigee AI Gateway](https://cloud.google.com/solutions/apigee-ai). In these labs the AI Gateway will be using models from the [Gemini Enterprise Model Garden](https://cloud.google.com/model-garden), but can also proxy / integrate models from any provider.
 
 ![AI Gateway Overview](https://iili.io/Bm91xHB.png)
 
@@ -23,8 +23,8 @@ The YOUR_SA_ACCOUNT must be a service account email with at least the **roles/ai
 ## Labs
 1. Open the labs here: https://apigee-emulator-ghfontasua-ew.a.run.app/labs.
 2. Register with your name, and test & trace the model APIs **Interactions API**, **Completions API**, **Generate Content API**, **Messages API** and the **Embeddings API**.
-3. Test **Model Security** using [Google Cloud Model Armor]().
-4. Test **Model Failover** using [Apigee Fault Rules]().
-5. Test **Smart Model** routing using [Apigee Evals]().
-6. Test **MCP Authorization** on a demo MCP server using [Apigee MCP Support]().
-7. Visualize **AI Analytics** using [Apigee Analytics]().
+3. Test **Model Security** using Google Cloud Model Armor.
+4. Test **Model Failover** using Apigee Fault Rules.
+5. Test **Smart Model** routing using Apigee Evals.
+6. Test **MCP Authorization** on a demo MCP server using Apigee MCP Support.
+7. Visualize **AI Analytics** using Apigee Analytics.
